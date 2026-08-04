@@ -69,7 +69,7 @@ python scripts/convert_olmocr.py --data-root /path/to/olmOCR-mix-1025 \
 
 视觉侧（SAM+CLIP+projector）全程冻结——模型 forward 本就用 `no_grad` 包住视觉，梯度进不去。
 
-关键 config 项：`train_mode / mode / rswa_train / gradient_checkpointing / lora_r / lr / max_steps / grad_accum`。单卡长序列必须 `gradient_checkpointing: true`。
+关键 config 项：`train_mode / mode / rswa_train / gradient_checkpointing / lora_r / lr / max_steps / grad_accum / max_length / length_strategy`。`max_length` 是 image + prompt + target 的编码后总长度；超限默认 `error`，也可显式设为 `drop`，不会静默截断 OCR target。单卡长序列必须 `gradient_checkpointing: true`。
 
 ## 目录
 
@@ -78,6 +78,7 @@ src/uocr_train/   constants dataset processor collator model_loader train_modes 
 scripts/          make_synth_smoke_data convert_olmocr make_multipage eval_forward train reload_check eval_infer
 configs/          *.yaml
 docs/DESIGN.md    架构与设计（R-SWA、image-token 构造、训练两坑、北极星目标等）
+docs/ms_swift_comparison_2026-08-04.md  ms-swift 实测结果、训练口径差异与公平 A/B 条件
 ```
 
 ## 现状与边界

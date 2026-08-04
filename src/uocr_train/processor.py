@@ -1,8 +1,7 @@
 """UOCR-native processor：把一个 sample dict 编码成 Unlimited-OCR forward 需要的单样本 tensor。
 
 single_gundam / single_base 的 image-token 构造与 labels mask 逐行对齐已实测的
-debug/debug_batch2_forward.py。multi_base 按 infer_multi 复刻，标注 [UNVERIFIED]，
-等有多页样本再对 infer_multi 的 token 数核验。
+debug/debug_batch2_forward.py。multi_base 按 infer_multi 复刻，forward 与训练均已实测。
 """
 import torch
 from PIL import ImageOps

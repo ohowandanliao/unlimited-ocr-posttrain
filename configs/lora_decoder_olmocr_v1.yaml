@@ -9,6 +9,8 @@ gpu: "0"
 seed: 0
 batch_size: 1
 grad_accum: 2
+max_length: 8192
+length_strategy: error
 max_steps: 150
 warmup_steps: 15
 lr: 1.0e-4

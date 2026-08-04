@@ -13,6 +13,8 @@ gpu: "0"
 seed: 0
 batch_size: 1
 grad_accum: 2
+max_length: 8192                                 # 多页超限时先显式报错，不截断 target
+length_strategy: error
 max_steps: 40                                      # 冒烟，够确认能训即可
 warmup_steps: 5
 lr: 1.0e-4

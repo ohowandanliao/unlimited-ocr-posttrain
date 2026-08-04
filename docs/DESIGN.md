@@ -187,7 +187,7 @@ train_uocr/
 - `images_ori = stack(page_images)`，`images_crop = zeros`，`images_spatial_crop = [[1,1]]*页数`
 - 注意 batch=2 是两个独立样本，不是一个样本两页
 
-`multi_gundam`：暂不实现真正多页 crop（需改 `UnlimitedOCRModel.forward`）。config 里保留 `multi_gundam_global`（多页各 1024 global view、无 local crop）作为近似 debug mode。
+`multi_gundam`：暂不实现真正多页 crop（需改 `UnlimitedOCRModel.forward`，按页保存 crop offset 并分别拼接 local/global features）。当前代码也不存在独立的 `multi_gundam_global` mode；多页 global-only 的唯一正式名称就是 `multi_base`。ms-swift 4.4.2 虽能逐页预处理 crop，但 stock model forward 仍有同一限制，不能直接替代这项实现。
 
 单样本输出 dict：`{input_ids, labels, images_seq_mask, images:(images_crop,images_ori), images_spatial_crop, prompt_len, image_tokens}`。
 

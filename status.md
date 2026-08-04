@@ -1,6 +1,6 @@
 # Unlimited-OCR 后训练 status（活日志，持续更新）
 
-最后更新：2026-07-20
+最后更新：2026-08-04
 设计权威文档：`docs/DESIGN.md`（结构稳定）。本文件是"做到哪、改了啥、踩过啥"的活日志。
 北极星：多页 PDF -> 一份统一、跨页合并的 markdown（目前无此能力、公开无现成数据；只记录不实现，见 design 0.5 节）。
 
@@ -41,9 +41,16 @@
 | single_base | 已实现+实测 | 1024 无 crop |
 | multi_base | 已实现+实测 | 多页各 1024 base view、无 crop；对齐 infer_multi，每页 273 token |
 | **multi_gundam** | **未实现** | 需改 UnlimitedOCRModel.forward 的 crop 分支支持"每页各自 local crops"。分辨率向的坑（paper 自承多页只 base、40+页小字丢），与北极星正交，暂缓 |
-| multi_gundam_global | 未单列 | 多页各 1024 global、无 crop，约等于 multi_base |
 
 ## 变更日志（倒序）
+
+### 2026-08-04｜ms-swift 4.4.2 对照 + 训练可观测性修正
+- 单卡 RTX 4090 跑通 ms-swift Unlimited-OCR/R-SWA：stock 150 步约 8 分钟、峰值 15.07 GiB；同 6 条 held-out similarity 为 0.826，本仓库现有 adapter 为 0.905。另一个对齐 `beta2`/EOS 的实验为 0.767，但训练输入和顺序仍不完全一致，不能归因成框架优劣。完整记录见 `docs/ms_swift_comparison_2026-08-04.md`。
+- 发现 tokenizer 边界差异：本仓库联合 tokenize 会出现跨 prompt/target 的 `.An` token 并整体 mask；ms-swift 分开 tokenize。该项先记录，后续只做单变量 A/B，本次不改 processor。
+- 进一步核对多页：官方 README/`infer_multi` 明确只支持 1024 base、无 crop；ms-swift 虽展开多图并预处理 crops，但官方 crop forward 隐含单图，真正的 `multi_gundam` 仍不可用。ms-swift 跑多页必须全局设 `CROP_MODE=false IMAGE_SIZE=1024`。
+- 进一步核对 loss：本仓库跨 microbatch 是每文档等权，ms-swift 4.4.2 按有效 target token 数加权；这是质量对照中另一个未对齐变量。此次只修日志，不改变本仓库训练目标。
+- 修正 `grad_accum>1` 的 loss 日志：由“只记最后一个 microbatch”改成 optimizer step 内全部 microbatch 的均值，并输出全程 mean。
+- 增加编码后总长度保护：所有 config 显式 `max_length: 8192`、`length_strategy: error`；可选 `drop` 并汇总，禁止静默 truncate OCR target。
 
 ### 2026-07-20｜从 export 恢复 + 定调"维持、不走量"
 - 07-19 原 session 死于账号绑定错误;用 resume-from-export 从两份 txt 重建,brief 落盘 `.resume/brief_ocr_2026-07-19.md`(本地)。**07-16 之后无未落盘工作**:那轮已 commit+push(`6aae56d`+`7b394e9`)、工作树干净,丢的只是会话上下文。

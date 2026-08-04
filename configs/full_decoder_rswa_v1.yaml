@@ -14,6 +14,8 @@ gpu: "0"
 seed: 0
 batch_size: 1
 grad_accum: 2
+max_length: 8192         # image + prompt + target 的编码后总长度
+length_strategy: error  # 超长时明确失败；可改 drop，绝不静默截断
 max_steps: 150
 warmup_steps: 15
 lr: 5.0e-6              # 含 experts 的全参，lr 更保守

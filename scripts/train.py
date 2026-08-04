@@ -17,6 +17,7 @@ from uocr_train.dataset import UOCRJsonlDataset
 from uocr_train.processor import UOCRProcessor
 from uocr_train.collator import UOCRCollator
 from uocr_train.train_modes import apply_train_mode, build_optimizer, print_trainable_parameters
+from uocr_train.training_utils import SequenceLengthGuard
 
 
 def to_cuda(batch):
@@ -61,10 +62,27 @@ def main():
     ds = UOCRJsonlDataset(cfg["train_jsonl"])
     assert len(ds) > 0, f"empty dataset: {cfg['train_jsonl']}"
     forced_mode = cfg.get("mode")  # 训练时统一 mode（覆盖 jsonl 里的 mode）
+    length_guard = SequenceLengthGuard(
+        max_length=int(cfg.get("max_length", 8192)),
+        strategy=str(cfg.get("length_strategy", "error")),
+    )
+    print(f"[length] max_length={length_guard.max_length} strategy={length_guard.strategy}")
 
     def collate(rows):
-        enc = [proc.encode(dict(r, mode=forced_mode) if forced_mode else r) for r in rows]
-        return coll(enc)
+        encoded = []
+        for row in rows:
+            sample = dict(row, mode=forced_mode) if forced_mode else row
+            item = proc.encode(sample)
+            sequence_length = int(item["input_ids"].numel())
+            if not length_guard.check(item.get("id"), sequence_length):
+                print(
+                    f"[length] dropped id={item.get('id')!r} tokens={sequence_length} "
+                    f"max_length={length_guard.max_length}",
+                    flush=True,
+                )
+                continue
+            encoded.append(item)
+        return coll(encoded) if encoded else None
 
     dl = torch.utils.data.DataLoader(
         ds, batch_size=int(cfg.get("batch_size", 1)), shuffle=True,
@@ -83,8 +101,12 @@ def main():
     step, micro = 0, 0
     optim.zero_grad()
     losses = []
+    micro_losses = []
     while step < max_steps:
+        micro_at_epoch_start = micro
         for batch in dl:
+            if batch is None:
+                continue
             b = to_cuda(batch)
             if want_rswa:
                 rswa.set_mask(rswa.build_rswa_mask(
@@ -95,8 +117,10 @@ def main():
                     images=b["images"], images_seq_mask=b["images_seq_mask"],
                     images_spatial_crop=b["images_spatial_crop"], use_cache=False, return_dict=True,
                 )
-                loss = out.loss / accum
+                unscaled_loss = out.loss
+                loss = unscaled_loss / accum
             loss.backward()
+            micro_losses.append(unscaled_loss.detach())
             if want_rswa:
                 rswa.clear()
             micro += 1
@@ -107,7 +131,8 @@ def main():
                 sched.step()
                 optim.zero_grad()
                 step += 1
-                lv = float(out.loss.detach().cpu())
+                lv = float(torch.stack(micro_losses).mean().float().cpu())
+                micro_losses.clear()
                 losses.append(lv)
                 print(f"[train] step {step}/{max_steps} loss={lv:.4f} lr={sched.get_last_lr()[0]:.2e}", flush=True)
                 if save_every and step % save_every == 0 and step < max_steps:
@@ -116,6 +141,8 @@ def main():
                     print(f"[train] checkpoint -> {ckpt}", flush=True)
                 if step >= max_steps:
                     break
+        if micro == micro_at_epoch_start:
+            raise RuntimeError(f"no valid batches produced in a full dataset pass; {length_guard.summary()}")
 
     out_dir = cfg["output_dir"]
     os.makedirs(out_dir, exist_ok=True)
@@ -123,8 +150,9 @@ def main():
     tok.save_pretrained(out_dir)
     print(f"[train] saved to {out_dir}")
     if losses:
-        print(f"[train] loss first={losses[0]:.4f} last={losses[-1]:.4f} "
+        print(f"[train] loss first={losses[0]:.4f} last={losses[-1]:.4f} mean={sum(losses) / len(losses):.4f} "
               f"finite={all(l == l for l in losses)}")
+    print(f"[length] {length_guard.summary()}")
     print("train_ok")
 
 
