@@ -25,6 +25,8 @@ matplotlib
 # 数据管线（olmOCR 转换 + 渲染 PDF->PNG）
 pyarrow>=14
 pymupdf>=1.24
+pypdf>=5,<7
+markdown-it-py>=3,<5
 datasets
 pillow>=10
 requests

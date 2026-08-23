@@ -121,13 +121,14 @@ debug 脚本没显式指定也能跑，是因为自定义模型未声明 sdpa �
 | train_mode | 训练范围 | 单卡 4090 | 备注 |
 |---|---|---|---|
 | `lora_attn` | `layers.*.self_attn.{q,k,v,o}_proj` | 轻松 | 最小 smoke，验证数据/collator/loss/保存 |
-| `lora_decoder` | attn + `mlp.*.{gate,up,down}_proj`（含 expert） | 可 | 正式 LoRA baseline，rank8≈39M / rank16≈78M |
+| `lora_decoder` | attn + dense MLP + shared experts；排除 64 routed experts | 可 | 正式 LoRA baseline；当前 rank16 实测约 3.98M |
+| `full_backbone` | 与 `lora_decoder` 相同范围的全参版，排除 routed experts | 短序列已跑通 | 约 182M；只作 LoRA 容量对照，不能外推到 8K/16K |
 | `full_decoder` | `model.layers.*` 全参（含 3B experts） | **装不下**（AdamW master+m+v≈46GB） | 需 4 卡 accelerate/DeepSpeed ZeRO-2/3，或 8bit-adam+offload |
 | `full_lm` | `layers.* + lm_head (+embed 可选)` | 同上 | 更激进，embed 默认不训 |
 
 冻结（所有模式）：`model.sam_model / vision_model / projector / image_newline / view_seperator`。视觉编码分支在 `modeling_unlimitedocr.py:493 with torch.no_grad()`，第一阶段不碰。
 
-结论：LoRA 单卡即可；full 系列必须走多卡脚手架 —— 这正是要借 MolSeek `_maybe_launch_with_accelerate` 的原因。
+结论：正式主线使用 `lora_decoder + R-SWA`；`full_backbone` 只在同一短序列数据上做容量 A/B，`full_decoder/full_lm` 暂不进入 READoc 第一阶段。所有模式的长序列 activation 相同，LoRA 并不能解决 attention/logits OOM。长度与训练范围的最新决策见 `readoc_96page_training_options_2026-08-16.md`。
 
 ---
 
@@ -266,14 +267,14 @@ MolSeek = 化学分子 OCR（图→SMILES），数据是 RDKit 现渲的分子�
 2. 从 `debug_batch2_forward.py` 抽 `processor.py`（single_gundam/single_base/multi_base）+ `collator.py`
 3. `model_loader.py`（eager + gc + use_cache=False）
 4. `eval_forward.py`：先只验 forward loss（batch1/2 single、batch1 multi_base）
-5. `train_modes.py`（lora_attn/lora_decoder/full_decoder/full_lm + freeze + split_lr）
-6. `train.py`：lora_attn 跑 20 步 → lora_decoder 20 步 → full_decoder 5 步
+5. `train_modes.py`（lora_attn/lora_decoder/full_backbone/full_decoder/full_lm + freeze + split_lr）
+6. `train.py`：lora_attn 做最小 smoke → lora_decoder 做正式 baseline → 仅在 LoRA 容量不足时增加 full_backbone 短序列 A/B
 7. `export_adapter.py` + `infer_transformers.py`：reload 验证
 8. 最后接 SGLang/vLLM
 
 第一版验收：
 - 能读单页/多页样本；`eval_forward` batch1/2 出有限 loss（非 NaN）
-- `lora_attn` 20 步存 adapter；`lora_decoder` 20 步；`full_decoder` ≥5 步（多卡）
+- `lora_attn` 完成 adapter 保存/reload smoke；`lora_decoder + R-SWA` 完成正式 baseline；`full_decoder/full_lm` 不作为第一阶段验收项
 - reload adapter / merged model 做 Transformers 推理正常
 
 环境缺包（要装）：`peft datasets pyyaml`（+ 全参多卡时 `deepspeed` 或 `bitsandbytes`）。

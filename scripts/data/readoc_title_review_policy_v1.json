@@ -1,0 +1,71 @@
+{
+  "schema_version": "readoc-title-review-policy-v1",
+  "ruleset_version": "readoc-title-rules-2026-08-23-v1",
+  "bulk_decisions": [
+    {
+      "decision_id": "ARXIV_H6_ABSTRACT_TO_H2_V1",
+      "decision": "ACCEPT_SILVER",
+      "source": "arxiv",
+      "operation": "change_level",
+      "current_level": 6,
+      "normalized_text": "abstract",
+      "required_source_kind": "atx_top_level",
+      "proposed_level": 2,
+      "evidence_documents": [
+        "0705.4297",
+        "0709.4466",
+        "1607.02743"
+      ],
+      "reason": "READoc arXiv systematically encodes the visual Abstract label as H6. For semantic hierarchy training it is normalized to the same H2 section band as Introduction; this is a silver policy, not a claim of per-document gold review."
+    }
+  ],
+  "document_decisions": [
+    {
+      "decision_id": "ARXIV_0911_4272_PROMOTE_TITLE_V1",
+      "decision": "ACCEPT_SILVER",
+      "source": "arxiv",
+      "doc_id": "0911.4272",
+      "source_sha256": "07a79193152da94bb92aee0f5a9a7391cbf489cc626605864ef56410ccf8b5a7",
+      "pdf_sha256": "b7faf03d65c8f7f25ab17920ed5f2fe1e32ef07e09a709220bb88920f8958adb",
+      "line": 1,
+      "operation": "promote",
+      "expected_source_line": "Angle measures of some cones associated with finite reflection groups",
+      "proposed_level": 1,
+      "proposed_text": "Angle measures of some cones associated with finite reflection groups",
+      "pdf_page": 1,
+      "evidence_method": "pdf_page_visual_review",
+      "reason": "The first Markdown line exactly matches the centered large-font title on PDF page 1."
+    },
+    {
+      "decision_id": "ARXIV_1607_02743_RESTORE_TITLE_V1",
+      "decision": "ACCEPT_SILVER",
+      "source": "arxiv",
+      "doc_id": "1607.02743",
+      "source_sha256": "bd7410c787f159033a3020f3f178e84fe1013ef2b6f9844c145a0bf2bc37e867",
+      "pdf_sha256": "eef0cb606e9e63e7134b4d940c6776059dbd871de0010b6a76ed71fc6485772a",
+      "line": 1,
+      "operation": "replace_heading",
+      "expected_source_line": "#",
+      "proposed_level": 1,
+      "proposed_text": "Information uncertainty related to marked random times and optimal investment",
+      "pdf_page": 1,
+      "evidence_method": "pdf_page_visual_review",
+      "reason": "The source contains an empty H1; the replacement exactly transcribes the two-line large-font title on PDF page 1."
+    }
+  ],
+  "page_evidence_overrides": [
+    {
+      "evidence_id": "ARXIV_0905_3502_ABSTRACT_PAGE_V1",
+      "source": "arxiv",
+      "doc_id": "0905.3502",
+      "source_sha256": "5498ff7f724d16255a1b0bf494ab48a84c7a4f710432bc876288dee502690c58",
+      "pdf_sha256": "48f13774c2e1ca922e180e061bfe802b367b8a98f1e4ff15427fd6ac17af02e8",
+      "line": 8,
+      "pdf_page": 1,
+      "visible_text": "Abstract",
+      "evidence_method": "rendered_page_visual_review_144dpi",
+      "rendered_page_sha256": "baef8769854485df1ebd42c4275c86e08ef954c003ae35407fbc846a6fc59eae",
+      "reason": "The PDF uses a broken native text encoding, but the 144 DPI page-1 render visibly contains the Abstract label and matching abstract body."
+    }
+  ]
+}

@@ -65,7 +65,8 @@ python scripts/convert_olmocr.py --data-root /path/to/olmOCR-mix-1025 \
 
 - `lora_attn`：只在 `self_attn.{q,k,v,o}_proj` 加 LoRA（最小 smoke）
 - `lora_decoder`：attn + dense-mlp + shared_experts（**有意排除 64 个 routed experts**：MoE 每 token 只激活 6/64，expert 上 LoRA 梯度稀疏且参数爆炸）
-- `full_decoder` / `full_lm`：解冻 `model.layers.*`（全参需多卡 DeepSpeed ZeRO / FSDP，单卡装不下）
+- `full_backbone`：`lora_decoder` 同范围的全参版（约 182M，只作短序列容量对照）
+- `full_decoder` / `full_lm`：解冻 routed experts 的大规模全参方案；暂不进入 READoc 第一阶段
 
 视觉侧（SAM+CLIP+projector）全程冻结——模型 forward 本就用 `no_grad` 包住视觉，梯度进不去。
 
@@ -79,6 +80,7 @@ scripts/          make_synth_smoke_data convert_olmocr make_multipage eval_forwa
 configs/          *.yaml
 docs/DESIGN.md    架构与设计（R-SWA、image-token 构造、训练两坑、北极星目标等）
 docs/ms_swift_comparison_2026-08-04.md  ms-swift 实测结果、训练口径差异与公平 A/B 条件
+docs/readoc_96page_training_options_2026-08-16.md  READoc 全量长度分布、四套训练方案复盘与长度决策
 ```
 
 ## 现状与边界
