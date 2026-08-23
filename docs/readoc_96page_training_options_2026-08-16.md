@@ -1,5 +1,10 @@
 # READoc 长度审计与训练改造方案：ms-swift + R-SWA（更新于 2026-08-19）
 
+> **长度分析保留，训练队列已被取代。** 当前唯一执行文档是
+> [`../ms_swift_title_mask/TRAINING_PLAN_ZH.md`](../ms_swift_title_mask/TRAINING_PLAN_ZH.md)。本文件中的
+> `lora_attn`、full-backbone/full-decoder、FlexAttention 等仅是历史分析，不进入 2026-08-23 的
+> reviewed-title 训练；正式只用 ms-swift decoder-backbone LoRA。
+
 > 状态：基于 READoc 全量原始数据审计的工程决策。目标是**复用 Unlimited-OCR 权重，以原始页面图像输入，输出完整、连续的 Markdown，并保持官方 R-SWA 语义**。
 
 ## 0. 先看结论

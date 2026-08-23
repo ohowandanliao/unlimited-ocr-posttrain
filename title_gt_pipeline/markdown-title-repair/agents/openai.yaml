@@ -1,0 +1,4 @@
+interface:
+  display_name: "Markdown Title Repair"
+  short_description: "Repair Markdown headings through a configurable LLM API"
+  default_prompt: "Use $markdown-title-repair to repair heading recognition and levels in my Markdown files."

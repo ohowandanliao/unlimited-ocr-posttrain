@@ -27,12 +27,28 @@ CROP_MODE=false IMAGE_SIZE=1024 BASE_SIZE=1024 swift sft ...
 - 训练分阶段：Stage1 单训 DeepEncoder（视觉）；Stage2 编码器-解码器联合训，数据是 OCR+视觉+文本混合；再 SFT。
 - 结论：**不是只用 gundam 训 —— 是多 mode 混着训。**
 
-## 我们的现状 vs 目标
-- **现状**：`single_gundam`、`single_base` 的 forward 已实测；`multi_base` 的 forward 与 R-SWA 训练已实测。各正式 config 目前仍会用 `mode:` 统一覆盖数据，这是具体实验选择，不是 processor 限制。
-- **风险**：只训一种 mode 可能弱化其它 mode（尤其全参微调时）；LoRA 冻结 base 相对安全。
-- **多页主目标**：多页输入 → 一份跨页合并的连续 Markdown；输入侧先用已验证的 `multi_base` 即可验证这个行为目标。
-- **`multi_gundam`**：属于额外的高清多页输入能力，**超出 Unlimited-OCR 和 stock ms-swift 的原生能力**。它需要新写 forward 的逐页 crop 分支，而且典型 12-crop 页面约 1513 个视觉 token，5 页已约 7565 个，不能只改一个 mode 名称。
-- **建议**：正式训练按任务混合 `single_gundam` + `multi_base`；是否投入 `multi_gundam`，应与跨页合并行为的训练分开评估。
+## 当前四种模式决策
+
+| 模式 | stock 支持 | 当前 reviewed-title 训练 |
+|---|---|---|
+| `single_gundam` | 支持 | 不混入本轮；需要时另开 crop 进程和独立实验 |
+| `single_base` | 支持 | PMC strict-single 使用 |
+| `multi_base` | 支持 | READoc full 与 PMC full 使用，是多页主线 |
+| `multi_gundam` | 不支持 | 不实现 |
+
+本轮不是只保留多页数据，而是用一套进程级 `base/no-crop 1024` 视觉策略同时训练单页和多页。这样能保留
+单页 document parsing 监督，又不需要在同一进程逐样本切换 crop。正式命令统一设置：
+
+```bash
+CROP_MODE=false IMAGE_SIZE=1024 BASE_SIZE=1024
+```
+
+`single_gundam` 不能和 `multi_base` 在一个 stock ms-swift 训练进程中混合，因为 crop 开关是进程级配置。
+若后续证据表明小字单页明显回退，可从同一 base model/adapter 单独跑 gundam 阶段并做遗忘评估；这不是当前
+full CE/title-mask A/B 的一部分。
+
+`multi_gundam` 属于额外的高清多页输入能力，超出 Unlimited-OCR 和 stock ms-swift 的原生能力。它需要新写
+forward 的逐页 crop 分支，而且典型 12-crop 页面约 1513 个视觉 token，5 页已约 7565 个，不能只改 mode 名称。
 
 ## 来源
 - DeepSeek-OCR 论文 arXiv:2510.18234；GitHub `deepseek-ai/DeepSeek-OCR`

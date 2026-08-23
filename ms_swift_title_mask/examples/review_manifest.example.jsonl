@@ -1,0 +1,2 @@
+{"id":"readoc_example_train","status":"HUMAN_ACCEPTED","split":"train","review_id":"readoc_example_train_human_v1","review_version":"title-review-v1","reviewer":"human-reviewer","reviewed_at":"2026-08-23T10:00:00+08:00","assistant_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","title_heading_count":2}
+{"id":"readoc_example_unreviewed","status":"SILVER_CANDIDATE"}

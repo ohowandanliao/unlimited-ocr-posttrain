@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+_title_repair_audit/
+*_title_repair_audit/
+.env
+config.local.json

@@ -1,0 +1,21 @@
+{
+  "api": {
+    "url": "",
+    "url_env": "TITLE_REPAIR_API_URL",
+    "api_key_env": "TITLE_REPAIR_API_KEY",
+    "model": "",
+    "model_env": "TITLE_REPAIR_MODEL",
+    "auth_header": "Authorization",
+    "auth_scheme": "Bearer",
+    "timeout_seconds": 120,
+    "max_retries": 3,
+    "retry_backoff_seconds": 2,
+    "temperature": 0,
+    "max_tokens": 8000,
+    "json_mode": true,
+    "headers": {},
+    "extra_body": {}
+  },
+  "rules_file": "review_rules.md",
+  "max_input_chars": 120000
+}
