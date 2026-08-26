@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import math
 from dataclasses import dataclass
 from typing import Iterable, List, Mapping, Sequence, Tuple
 
@@ -170,8 +171,23 @@ def build_sequence_loss_scale(
     response_ids: Sequence[int],
     response_weights: Sequence[int],
     suffix_ids: Sequence[int],
+    *,
+    body_weight: float = 0.0,
+    title_weight: float = 1.0,
+    eos_weight: float = 1.0,
 ) -> List[float]:
     """Create title+EOS weights while preserving native input IDs and labels."""
+    for name, value in (
+        ("body_weight", body_weight),
+        ("title_weight", title_weight),
+        ("eos_weight", eos_weight),
+    ):
+        if not isinstance(value, (int, float)) or not math.isfinite(value):
+            raise TitleMaskError(f"{name} must be a finite number")
+        if value < 0:
+            raise TitleMaskError(f"{name} must be non-negative")
+    if title_weight <= 0:
+        raise TitleMaskError("title_weight must be positive")
     if len(input_ids) != len(labels):
         raise TitleMaskError("input_ids and labels have different lengths")
     if len(response_ids) != len(response_weights):
@@ -191,8 +207,11 @@ def build_sequence_loss_scale(
         raise TitleMaskError("suffix token IDs do not match native input_ids")
 
     loss_scale = [0.0] * len(input_ids)
-    loss_scale[start:response_end] = [float(weight) for weight in response_weights]
-    loss_scale[response_end:suffix_end] = [1.0] * len(suffix_ids)
+    loss_scale[start:response_end] = [
+        float(title_weight if weight else body_weight)
+        for weight in response_weights
+    ]
+    loss_scale[response_end:suffix_end] = [float(eos_weight)] * len(suffix_ids)
     if not any(loss_scale[start:response_end]):
         raise TitleMaskError("title mask has no active response token")
     return loss_scale

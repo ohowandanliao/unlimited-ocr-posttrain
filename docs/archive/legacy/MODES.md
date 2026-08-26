@@ -1,5 +1,7 @@
 # 输入 mode:base/gundam × single/multi（现状、目标、怎么训）
 
+> **历史资料：不可作为当前执行入口。** 本文只保留 mode 能力边界和研究事实；当前训练方案及 PMC/标题结论以 [`training_optimization_2026-08-26.md`](../../training_optimization_2026-08-26.md) 为准。
+
 ## mode 是什么
 输入图像的分辨率/切块策略，决定 image token 数、能看多细、一次几页。
 - **base**：整张 1024×1024，不切块，~256（本模型实测 273）token。省 token、小字易糊。

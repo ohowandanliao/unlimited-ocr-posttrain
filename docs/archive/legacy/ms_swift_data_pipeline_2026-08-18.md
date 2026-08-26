@@ -1,9 +1,6 @@
 # ms-swift 数据准备、混合与标题 Loss 方案（更新于 2026-08-23）
 
-> **历史设计文档，已不再是当前执行口径。** 2026-08-23 起只执行
-> [`../ms_swift_title_mask/TRAINING_PLAN_ZH.md`](../ms_swift_title_mask/TRAINING_PLAN_ZH.md)：仅
-> `HUMAN_ACCEPTED` 与规则冻结、可追溯的 `SILVER_ACCEPTED` 数据，同数据 full CE / title-mask 两组，
-> decoder-backbone LoRA。本文未冻结的 silver candidate、S10/S20、title-weighted 和 full parameter 方案均不进入当前训练。
+> **历史资料：不可作为当前执行入口。** 本文保留数据管线研究；其中旧的 silver、S10/S20、title-weighted 和 full-parameter 方案均不可直接执行。当前训练、数据混合及 PMC/标题结论以 [`training_optimization_2026-08-26.md`](../../training_optimization_2026-08-26.md) 为准。
 
 > 用途：交给另一台服务器上的 Codex 直接实施。训练框架固定为最新 `ms-swift`，模型固定为 Unlimited-OCR，目标是“页面图像 -> 一份连续、无 `<PAGE>` 的完整 Markdown”。本文只规定数据与 loss 改造，不重复模型 LoRA、R-SWA 和长序列 kernel 方案。
 

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Freeze PMC title rules into full-document and strict single-page silver JSONL."""
+"""Reproduce the historical PMC title-silver JSONL snapshot.
+
+Title acceptance is not full-content acceptance: this builder does not consume
+the PMC content quarantine and its output must not be used by current recipes.
+"""
 
 from __future__ import annotations
 

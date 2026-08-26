@@ -1,7 +1,9 @@
 # READoc 长度审计与训练改造方案：ms-swift + R-SWA（更新于 2026-08-19）
 
+> **历史资料：不可作为当前执行入口。** 本文保留长度审计和容量分析；其中旧训练队列及 PMC/标题结论不再适用。当前方案以 [`training_optimization_2026-08-26.md`](../../training_optimization_2026-08-26.md) 为准。
+
 > **长度分析保留，训练队列已被取代。** 当前唯一执行文档是
-> [`../ms_swift_title_mask/TRAINING_PLAN_ZH.md`](../ms_swift_title_mask/TRAINING_PLAN_ZH.md)。本文件中的
+> [`../../../ms_swift_title_mask/TRAINING_PLAN_ZH.md`](../../../ms_swift_title_mask/TRAINING_PLAN_ZH.md)。本文件中的
 > `lora_attn`、full-backbone/full-decoder、FlexAttention 等仅是历史分析，不进入 2026-08-23 的
 > reviewed-title 训练；正式只用 ms-swift decoder-backbone LoRA。
 

@@ -1,5 +1,9 @@
 # 从 READoc / PMC 源数据重建 ms-swift 标题训练资产
 
+> **历史 2026-08-23 快照重建手册，不是下一轮训练入口。** 其中 PMC full/single natural union 会重现已知的
+> 正文准入缺陷，只能用于核对旧实验。新 R0/R1/S10 命令见
+> [`../../../ms_swift_title_mask/TRAINING_PLAN_ZH.md`](../../../ms_swift_title_mask/TRAINING_PLAN_ZH.md)。
+
 本文面向一台新的 Linux 服务器：只有 `ms-swift-patch` 分支、外部 ms-swift checkout、Unlimited-OCR
 模型和 READoc/PMC 源数据，也能从标题 GT 审计一直走到单卡或双卡 H100 训练。服务器不需要 AutoDL，所有
 工作路径都由环境变量指定。
@@ -47,11 +51,14 @@ PMC_SOURCE/
 
 ```bash
 export POSTTRAIN_ROOT=/absolute/path/to/unlimited-ocr-posttrain
-export MS_SWIFT_ROOT=/absolute/path/to/ms-swift
 export MODEL_PATH=/absolute/path/to/Unlimited-OCR-model
 export READOC_SOURCE=/absolute/path/to/READoc
 export PMC_SOURCE=/absolute/path/to/pmc_v26_pdf_gt_20260816
-export UOCR_WORK_ROOT=/absolute/path/to/uocr-work-20260823
+export UOCR_ROOT=/absolute/path/to/uocr-ms-swift-title-mask
+export MS_SWIFT_ROOT="$UOCR_ROOT/repos/ms-swift-uocr"
+export UOCR_SHIMS_ROOT="$UOCR_ROOT/runtime/shims"
+export PYTHON_BIN="$UOCR_ROOT/env/ms-swift-venv/bin/python"
+export UOCR_WORK_ROOT="$UOCR_ROOT/runs/20260823"
 export PAGE_ROOT="$UOCR_WORK_ROOT/pages"
 export ASSET_ROOT="$POSTTRAIN_ROOT/ms_swift_title_mask/data_assets"
 

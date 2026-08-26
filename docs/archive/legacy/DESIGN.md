@@ -1,5 +1,7 @@
 # Unlimited-OCR 后训练：干净工程设计（权威版）
 
+> **历史资料：不可作为当前执行入口。** 本文保留架构研究事实；当前训练、数据混合及 PMC/标题结论以 [`training_optimization_2026-08-26.md`](../../training_optimization_2026-08-26.md) 为准。
+
 日期：2026-07-08
 状态：设计定稿，待实现。本文件是 `train_uocr` 工程的唯一事实源，取代/收敛 `unlimited_ocr_training_plan_2026-07-07.md` 中散落的方案讨论（旧 plan 仅留作历史）。
 

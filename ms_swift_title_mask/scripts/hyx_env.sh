@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  echo "usage: source $0" >&2
+  exit 2
+fi
+
+set -u
+
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+POSTTRAIN_ROOT=${POSTTRAIN_ROOT:-$(cd "$SCRIPT_DIR/../.." && pwd)}
+HYX_ROOT=$(cd "$POSTTRAIN_ROOT/.." && pwd)
+UOCR_ROOT=${UOCR_ROOT:-$HYX_ROOT/uocr-ms-swift-title-mask}
+UOCR_VENV=${UOCR_VENV:-$UOCR_ROOT/env/ms-swift-venv}
+MS_SWIFT_ROOT=${MS_SWIFT_ROOT:-$UOCR_ROOT/repos/ms-swift-uocr}
+UOCR_SHIMS_ROOT=${UOCR_SHIMS_ROOT:-$UOCR_ROOT/runtime/shims}
+UOCR_WORK_ROOT=${UOCR_WORK_ROOT:-$UOCR_ROOT/runs}
+WORK_ROOT=${WORK_ROOT:-$UOCR_WORK_ROOT}
+MODEL_PATH=${MODEL_PATH:-}
+ASSET_ROOT=${ASSET_ROOT:-$POSTTRAIN_ROOT/ms_swift_title_mask/data_assets}
+PAGE_ROOT=${PAGE_ROOT:-}
+LENGTH_ROOT=${LENGTH_ROOT:-}
+TRAIN_JSONL=${TRAIN_JSONL:-}
+VAL_JSONL=${VAL_JSONL:-}
+TEST_JSONL=${TEST_JSONL:-}
+OUTPUT_DIR=${OUTPUT_DIR:-}
+PYTHON_BIN=${PYTHON_BIN:-$UOCR_VENV/bin/python}
+SWIFT_BIN=${SWIFT_BIN:-$UOCR_VENV/bin/swift}
+TRAINING_RECIPE=${TRAINING_RECIPE:-}
+LOSS_MODE=${LOSS_MODE:-}
+MAX_LENGTH=${MAX_LENGTH:-32768}
+ATTN_IMPL=${ATTN_IMPL:-sdpa}
+# Leave this unset unless the caller overrides it. _run_train.sh selects 8 for
+# one GPU and 4 for two GPUs so both launchers keep the same global batch size.
+GRAD_ACCUM=${GRAD_ACCUM:-}
+
+export POSTTRAIN_ROOT HYX_ROOT UOCR_ROOT UOCR_VENV MS_SWIFT_ROOT UOCR_SHIMS_ROOT
+export UOCR_WORK_ROOT WORK_ROOT MODEL_PATH ASSET_ROOT PAGE_ROOT LENGTH_ROOT
+export TRAIN_JSONL VAL_JSONL TEST_JSONL OUTPUT_DIR PYTHON_BIN SWIFT_BIN
+export TRAINING_RECIPE LOSS_MODE MAX_LENGTH ATTN_IMPL GRAD_ACCUM
+export PATH="$UOCR_VENV/bin:$PATH"
+export PYTHONPATH="$UOCR_SHIMS_ROOT:$MS_SWIFT_ROOT:$POSTTRAIN_ROOT${PYTHONPATH:+:$PYTHONPATH}"
+
+echo "[uocr-env] root=$UOCR_ROOT"
+echo "[uocr-env] work=$UOCR_WORK_ROOT"
+echo "[uocr-env] ms-swift=$MS_SWIFT_ROOT"
+echo "[uocr-env] MODEL_PATH/TRAIN_JSONL/VAL_JSONL/OUTPUT_DIR/TRAINING_RECIPE/LOSS_MODE must be set per experiment"

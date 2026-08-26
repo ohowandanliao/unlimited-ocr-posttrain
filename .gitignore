@@ -9,13 +9,25 @@ outputs/
 models/
 hf_cache/
 envs/
+*.jsonl
+!ms_swift_title_mask/examples/review_manifest.example.jsonl
+!ms_swift_title_mask/examples/train_row.example.jsonl
+!docs/evaluation_failure_cases_2026-08-25/cases.jsonl
+*.pdf
 *.safetensors
+*.pt
+*.pth
+*.ckpt
+*.bin
 *.parquet
 *.tar.gz
 *.zip
 *.png
 *.jpg
 *.jpeg
+*.webp
+*.tif
+*.tiff
 *.log
 
 .venv/

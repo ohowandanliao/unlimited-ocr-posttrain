@@ -67,6 +67,17 @@ class TitleMaskCoreTest(unittest.TestCase):
         self.assertEqual(labels, original_labels)
         self.assertEqual(rswa_prefix_length(labels), native_prefix)
 
+    def test_sequence_weighted_scale_keeps_body_and_doubles_titles(self):
+        prefix = [10, 11, 12]
+        response_ids = [20, 21, 22, 23]
+        eos = [2]
+        input_ids = prefix + response_ids + eos
+        labels = [-100] * len(prefix) + response_ids + eos
+        scale = build_sequence_loss_scale(
+            input_ids, labels, response_ids, [1, 1, 0, 0], eos,
+            body_weight=1.0, title_weight=2.0, eos_weight=1.0)
+        self.assertEqual(scale, [0, 0, 0, 2, 2, 1, 1, 1])
+
     def test_response_token_mismatch_is_rejected(self):
         with self.assertRaisesRegex(TitleMaskError, "response token IDs"):
             build_sequence_loss_scale([1, 7, 8, 2], [-100, 7, 9, 2], [7, 8], [1, 0], [2])

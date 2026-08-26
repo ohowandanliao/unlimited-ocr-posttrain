@@ -10,9 +10,9 @@ from ms_swift_title_mask.core import TitleMaskError, sha256_text
 from ms_swift_title_mask.data_contract import file_sha256, publish_directory, read_jsonl, validate_training_row
 PINNED_MS_SWIFT_COMMIT = "1a1ba3ee86488af323ef9b64ca3d34edee90ab11"
 VISUAL_TOKENS_PER_IMAGE = 273  # Pinned unlimited_ocr v1/no-crop, image_size=1024.
-SCHEMA_VERSION = "uocr-length-buckets-v2"
+SCHEMA_VERSION = "uocr-length-buckets-v3"
 BUCKETS = ((4096, "le_4k"), (8192, "le_8k"), (16384, "le_16k"), (24576, "le_24k"), (32768, "le_32k"))
-POOLS = frozenset({"readoc_full", "pmc_full", "pmc_single"})
+LEGACY_POOLS = frozenset({"readoc_full", "pmc_full", "pmc_single"})
 def bucket_for(length):
     for limit, name in BUCKETS:
         if length <= limit: return name
@@ -35,8 +35,12 @@ def count_row_tokens(row, tokenizer, *, visual_tokens_per_image=VISUAL_TOKENS_PE
     parts = prompt.split("<image>")
     prompt_tokens = len(_ids(tokenizer, parts[0])) + len(_ids(tokenizer, parts[1])) + len(images) * visual_tokens_per_image
     target_tokens = len(_ids(tokenizer, target)); total = 2 + prompt_tokens + target_tokens
-    return {"id": row.get("id"), "source": row.get("meta", {}).get("source"), "doc_id": row.get("meta", {}).get("doc_id"),
-            "split": row.get("meta", {}).get("split"), "mix_pool": row.get("meta", {}).get("mix_pool"), "images": len(images),
+    meta = row.get("meta", {})
+    recipe_pool = meta.get("recipe_mix_pool")
+    legacy_pool = meta.get("mix_pool")
+    pool = recipe_pool if isinstance(recipe_pool, str) and recipe_pool else legacy_pool
+    return {"id": row.get("id"), "source": meta.get("source"), "doc_id": meta.get("doc_id"),
+            "split": meta.get("split"), "mix_pool": pool, "images": len(images),
             "visual_tokens": len(images) * visual_tokens_per_image, "prompt_tokens": prompt_tokens, "target_tokens": target_tokens,
             "total_tokens": total, "bucket": bucket_for(total), "target_sha256": sha256_text(target)}
 def scan_rows(rows, tokenizer, max_length):
@@ -73,15 +77,18 @@ def build_outputs(input_dir, output_dir, tokenizer, max_length=32768, *, dry_run
         items = []
         for _, row in read_jsonl(path):
             validate_training_row(row, expected_split=split, check_images=False)
-            pool = row.get("meta", {}).get("mix_pool")
-            if pool not in POOLS:
-                raise TitleMaskError(f"{row.get('id')}: unknown mix_pool")
             audit = count_row_tokens(row, tokenizer)
+            pool = audit["mix_pool"]
+            if not isinstance(pool, str) or not pool:
+                raise TitleMaskError(
+                    f"{row.get('id')}: meta.recipe_mix_pool or meta.mix_pool must be a non-empty string"
+                )
             if audit["target_sha256"] != row["meta"].get("title_target_sha256"):
                 raise TitleMaskError(f"{row.get('id')}: target SHA mismatch")
             audit["fits"] = audit["total_tokens"] <= max_length
             items.append((row, audit))
         scanned[split] = items
+    pool_names = sorted({a["mix_pool"] for items in scanned.values() for _, a in items})
     report = {"schema_version": SCHEMA_VERSION, "model": model, "max_length": max_length,
               "bucket_definitions": {name: limit for limit, name in BUCKETS} | {"overflow": ">32768"},
               "length_contract": {
@@ -94,6 +101,7 @@ def build_outputs(input_dir, output_dir, tokenizer, max_length=32768, *, dry_run
                   "visual_tokens_per_image": VISUAL_TOKENS_PER_IMAGE,
                   "formula": "BOS + tokenize(prompt text around expanded image placeholders) + tokenize(response) + EOS",
                   "scope": "Pinned unlimited_ocr v1 no-crop 1024 contract; not a universal model constant.",
+                  "pool_field_priority": ["meta.recipe_mix_pool", "meta.mix_pool"],
               },
               "visual_tokens_per_image": VISUAL_TOKENS_PER_IMAGE,
               "tokenizer": _tokenizer_info(tokenizer),
@@ -105,13 +113,13 @@ def build_outputs(input_dir, output_dir, tokenizer, max_length=32768, *, dry_run
         manifests.extend(audits)
         report["splits"][split] = dict(_stats(audits),
             fit=sum(a["fits"] for a in audits), overflow=sum(not a["fits"] for a in audits),
-            pools={p: _stats([a for a in audits if a["mix_pool"] == p]) for p in sorted(POOLS)},
+            pools={p: _stats([a for a in audits if a["mix_pool"] == p]) for p in pool_names},
             sources={s: _stats([a for a in audits if a["source"] == s])
                      for s in sorted({a["source"] for a in audits})})
     all_audits = [a for items in scanned.values() for _, a in items]
     report["overall"] = dict(_stats(all_audits),
         fit=sum(a["fits"] for a in all_audits), overflow=sum(not a["fits"] for a in all_audits),
-        pools={p: _stats([a for a in all_audits if a["mix_pool"] == p]) for p in sorted(POOLS)},
+        pools={p: _stats([a for a in all_audits if a["mix_pool"] == p]) for p in pool_names},
         sources={s: _stats([a for a in all_audits if a["source"] == s])
                  for s in sorted({a["source"] for a in all_audits})})
     if dry_run:

@@ -1,5 +1,7 @@
 # OCR/VLM 图片转 Markdown 开源训练集深度调研
 
+> **历史资料：不可作为当前执行入口。** 本文保留数据集调研和来源事实，不代表已批准的数据依赖或训练配方；当前训练、数据混合及 PMC/标题结论以 [`training_optimization_2026-08-26.md`](../../training_optimization_2026-08-26.md) 为准。
+
 日期：2026-07-08  
 本轮重点：补齐每个数据集的输入、输出/GT、数据格式、是否可直接用于 `image/PDF -> Markdown` 后训练，并扩大到 DeepSeek-OCR、PaddleOCR-VL、GOT-OCR2、Dolphin、MonkeyOCR、MinerU、dots.mocr、FireRed-OCR 等 OCR-VLM 路线。
 
@@ -460,4 +462,3 @@ prompt 溯源（与部署对齐）：
 - DeepSeek/DeepSeek-OCR-2 markdown：`<image>\n<|grounding|>Convert the document to markdown.`；plain OCR：`<image>\nFree OCR.`
 - Unlimited-OCR 单图：`<image>document parsing.`；多页：`<image>Multi page parsing.`
 - 规则：plain text target 用 `Free OCR.`，只有 Markdown/HTML/表格 target 才用 markdown prompt，否则会教模型把无结构文本当 Markdown（本项目已实测：olmOCR 是 plain natural_text，与模型原生 layout 格式漂移会伤生成）。
-

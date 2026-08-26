@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Merge accepted READoc-full, PMC-full, and paired PMC-single rows."""
+"""Reproduce the historical READoc + PMC full/single natural-union mix.
+
+The current training plan forbids this composition; retain it only for exact
+snapshot reconstruction and failure analysis.
+"""
 
 from __future__ import annotations
 

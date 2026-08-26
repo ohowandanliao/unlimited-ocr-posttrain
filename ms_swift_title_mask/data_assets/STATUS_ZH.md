@@ -1,20 +1,25 @@
 # READoc / PMC 标题数据状态
 
+> **历史 payload 状态，不能作为当前训练准入。** 2026-08-26 审计确认 PMC 标题 silver 没有覆盖正文、公式、
+> 表格、图片资源或跨页 merge 质量，旧 full/single natural union 已停用。下面的数量和 SHA 契约仅用于复现旧
+> 4,524-row 快照；当前 recipe 见 [`../TRAINING_PLAN_ZH.md`](../TRAINING_PLAN_ZH.md)。
+
 快照日期：2026-08-23。这里随上传 ZIP 携带标题处理产物，但不携带 PDF、渲染页图或模型权重。
 三个 payload 目录在 posttrain Git 中被忽略；打包脚本会显式检查并收入 ZIP，Git 提交本身不携带这些大文件。
 
 ## 结论
 
-三个训练池均保留 provenance：`HUMAN_ACCEPTED` 与规则冻结、完整可追溯的 `SILVER_ACCEPTED` 都可训练，不能相互冒充。
+三个旧训练池保留标题 provenance，但该 provenance 不能代替正文准入。READoc 可作为 R0 候选；PMC 必须重做
+`content_review_status`、清理污染并按 S10 比例重新采样。
 
-| 目录 | 性质 | 能否直接用于 title-mask 正式训练 |
+| 目录 | 性质 | 当前决策 |
 |---|---|---|
-| READoc full | 1,552 篇、15,290 页、21,400 headings 的可追溯 silver Markdown | 可训练，manifest 保留 `SILVER_ACCEPTED` provenance |
-| PMC full | 1,486 篇、26,690 页、48,726 headings | 可训练，完整多页 Markdown |
-| PMC strict-single | 1,486 paired rows、6,011 headings | 完整单页 Markdown，可训练，和 PMC full 同 split |
+| READoc full | 1,552 篇、15,290 页、21,400 headings 的可追溯 silver Markdown | R0 候选；重新分桶和评测 |
+| PMC full | 1,486 篇、26,690 页、48,726 headings | 不直接训练；页字符串拼接且正文未验收 |
+| PMC strict-single | 1,486 paired rows、6,011 headings | 不与 full 全量重复；仅清洗/验收后进入 S10 候选 |
 
-`HUMAN_ACCEPTED` 表示 reviewer 完成整篇检查；`SILVER_ACCEPTED` 表示规则冻结且 provenance、source/target SHA
-和 PDF 证据完整。两者都可训练，但 manifest status 与 provenance 必须保持区分。
+`HUMAN_ACCEPTED` 表示 reviewer 完成标题检查；`SILVER_ACCEPTED` 表示标题规则冻结且 provenance、source/target
+SHA 和 PDF 证据完整。两者都只描述标题；完整 OCR 训练还必须单独验收正文内容。
 
 ## READoc 快照
 

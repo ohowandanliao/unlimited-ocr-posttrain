@@ -81,6 +81,30 @@ class LengthBucketTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 build_outputs(root, root / "nested", FakeFastTokenizer(), dry_run=False)
 
+    def test_recipe_mix_pool_is_supported_and_takes_precedence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "input"
+            root.mkdir()
+            for split in ("train", "validation", "test"):
+                item = self._training_row(split, "short", "a")
+                item["meta"]["recipe_mix_pool"] = "readoc"
+                (root / f"{split}.jsonl").write_text(
+                    json.dumps(item) + "\n",
+                    encoding="utf-8",
+                )
+            report = build_outputs(
+                root,
+                Path(tmp) / "unused",
+                FakeFastTokenizer(),
+                max_length=1000,
+                dry_run=True,
+            )
+        self.assertEqual(set(report["overall"]["pools"]), {"readoc"})
+        self.assertEqual(
+            report["length_contract"]["pool_field_priority"],
+            ["meta.recipe_mix_pool", "meta.mix_pool"],
+        )
+
     @staticmethod
     def _training_row(split, row_id, target):
         target = "# T\n\n" + target.rstrip() + "\n"

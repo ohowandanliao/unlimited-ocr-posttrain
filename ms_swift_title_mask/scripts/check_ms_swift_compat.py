@@ -49,6 +49,7 @@ def main():
             "loss_scale = torch.roll(loss_scale, shifts=-1, dims=-1).view(-1)",
             "outputs.loss = outputs.loss * loss_scale",
             "compute_loss_func(",
+            "num_items_in_batch=num_items_in_batch, loss_scale=loss_scale",
         ],
     )
     require_text(root / "swift/loss/mapping.py", ["loss_map = {"])
@@ -62,6 +63,11 @@ def main():
 
     assert "unlimited_ocr_title_mask" in TEMPLATE_MAPPING
     assert "uocr_title_active_mean" in loss_map
+    assert "unlimited_ocr_title_weighted" in TEMPLATE_MAPPING
+    assert "uocr_title_weighted_mean" in loss_map
+    assert "uocr_title_weighted_token_mean" in loss_map
+    assert "unlimited_ocr_uniform_ce" in TEMPLATE_MAPPING
+    assert "uocr_uniform_token_mean" in loss_map
     assert "uocr_lora_target_guard" in callbacks_map
 
     transformers_version = importlib.metadata.version("transformers")

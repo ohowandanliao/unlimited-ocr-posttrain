@@ -1,5 +1,7 @@
 # ms-swift 4.4.2 与本仓库训练差异（2026-08-04）
 
+> **历史资料：不可作为当前执行入口。** 这是 2026-08-04 的框架对比记录；当前训练、数据混合及 PMC/标题结论以 [`training_optimization_2026-08-26.md`](../../training_optimization_2026-08-26.md) 为准。
+
 ## 结论
 
 ms-swift 4.4.2 已能在单张 RTX 4090 上训练 Unlimited-OCR，并自动启用 R-SWA 训练 mask。当前实验只能比较两套现有训练方案，不能把质量差异单独归因于框架，因为 tokenizer 边界、EOS、optimizer 默认值、样本顺序和依赖版本并未全部一致。

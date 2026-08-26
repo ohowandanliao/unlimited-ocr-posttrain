@@ -1,5 +1,10 @@
 # PMC 标题 Silver 候选处理（2026-08-23）
 
+> **标题审计资料，不是完整正文训练准入。** 后续发现旧训练 builder 没有消费本文件的
+> `content_quarantine.jsonl`，并把标题 `SILVER_ACCEPTED` 错当成 full/single 正文已接受。本文的标题候选、
+> source SHA 和内容风险统计继续有效，但旧 PMC JSONL 不得直接进入新训练。当前方案见
+> [`training_optimization_2026-08-26.md`](training_optimization_2026-08-26.md)。
+
 ## 结论
 
 本轮参考 `pdf评估和gt/docs/10_middle_json到标题GT.md` 的可复用原则，完成了 PMC
