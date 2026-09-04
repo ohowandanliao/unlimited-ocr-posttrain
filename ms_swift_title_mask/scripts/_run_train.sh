@@ -13,9 +13,12 @@ POSTTRAIN_ROOT=$(cd "$BUNDLE_ROOT/.." && pwd)
 HYX_ROOT=$(cd "$POSTTRAIN_ROOT/.." && pwd)
 UOCR_ROOT=${UOCR_ROOT:-$HYX_ROOT/uocr-ms-swift-title-mask}
 MS_SWIFT_ROOT=${MS_SWIFT_ROOT:-$UOCR_ROOT/repos/ms-swift-uocr}
-UOCR_SHIMS_ROOT=${UOCR_SHIMS_ROOT:-$UOCR_ROOT/runtime/shims}
+UOCR_SHIMS_ROOT=${UOCR_SHIMS_ROOT:-$POSTTRAIN_ROOT/ms_swift_title_mask/shims}
 PYTHON_BIN=${PYTHON_BIN:-$UOCR_ROOT/env/ms-swift-venv/bin/python}
 SWIFT_BIN=${SWIFT_BIN:-$UOCR_ROOT/env/ms-swift-venv/bin/swift}
+DATA_ROOT=${DATA_ROOT:-$UOCR_ROOT/data}
+DATA_RECIPE_ROOT=${DATA_RECIPE_ROOT:-$DATA_ROOT/recipes}
+MODEL_OUTPUT_ROOT=${MODEL_OUTPUT_ROOT:-$UOCR_ROOT/output}
 
 # The venv's console script starts outside the checkout; make both the patched
 # ms-swift tree and the optional Apex compatibility shim importable explicitly.
@@ -24,9 +27,44 @@ export PYTHONPATH="$UOCR_SHIMS_ROOT:$MS_SWIFT_ROOT:$POSTTRAIN_ROOT${PYTHONPATH:+
 : "${MODEL_PATH:?set MODEL_PATH to the Unlimited-OCR model directory or model ID}"
 : "${TRAIN_JSONL:?set TRAIN_JSONL to reviewed train.jsonl}"
 : "${VAL_JSONL:?set VAL_JSONL to reviewed validation.jsonl}"
-: "${OUTPUT_DIR:?set OUTPUT_DIR to a new experiment directory}"
-: "${TRAINING_RECIPE:?set TRAINING_RECIPE to readoc_r0, replay_r1, pmc_s10, trusted_title, or legacy_20260823}"
+: "${OUTPUT_DIR:?set OUTPUT_DIR to a new experiment directory below MODEL_OUTPUT_ROOT}"
+: "${TRAINING_RECIPE:?set TRAINING_RECIPE to readoc_r0, replay_r1, pmc_s10, trusted_title, readoc_view_ablation, or legacy_20260823}"
 : "${LOSS_MODE:?set LOSS_MODE explicitly to full_ce, uniform_ce, title_weighted, or title_mask}"
+if ! command -v realpath >/dev/null 2>&1; then
+  echo "realpath is required to validate OUTPUT_DIR safely" >&2
+  exit 2
+fi
+MODEL_OUTPUT_ROOT=$(realpath -m "$MODEL_OUTPUT_ROOT")
+DATA_RECIPE_ROOT=$(realpath -m "$DATA_RECIPE_ROOT")
+OUTPUT_DIR=$(realpath -m "$OUTPUT_DIR")
+case "$OUTPUT_DIR" in
+  "$MODEL_OUTPUT_ROOT"/*) ;;
+  *)
+    echo "OUTPUT_DIR must be below MODEL_OUTPUT_ROOT=$MODEL_OUTPUT_ROOT" >&2
+    echo "refusing training output outside output/" >&2
+    exit 2
+    ;;
+esac
+if [[ "$OUTPUT_DIR" == */outputs || "$OUTPUT_DIR" == */outputs/* ]]; then
+  echo "OUTPUT_DIR must not use the ambiguous outputs directory: $OUTPUT_DIR" >&2
+  exit 2
+fi
+if [[ -e "$OUTPUT_DIR" ]]; then
+  echo "refusing to overwrite existing training output: $OUTPUT_DIR" >&2
+  exit 2
+fi
+mkdir -p "$MODEL_OUTPUT_ROOT"
+OUTPUT_KEY=${OUTPUT_DIR#"$MODEL_OUTPUT_ROOT"/}
+OUTPUT_KEY=${OUTPUT_KEY//\//__}
+RECIPE_REPORT=${RECIPE_REPORT:-$DATA_RECIPE_ROOT/${OUTPUT_KEY}.recipe_audit.json}
+RECIPE_REPORT=$(realpath -m "$RECIPE_REPORT")
+case "$RECIPE_REPORT" in
+  "$OUTPUT_DIR"|"$OUTPUT_DIR"/*)
+    echo "RECIPE_REPORT must stay outside OUTPUT_DIR: $RECIPE_REPORT" >&2
+    exit 2
+    ;;
+esac
+mkdir -p "$(dirname "$RECIPE_REPORT")"
 
 MAX_LENGTH=${MAX_LENGTH:-32768}
 MAX_STEPS=${MAX_STEPS:-}
@@ -58,7 +96,7 @@ case "$WORLD_SIZE" in
 esac
 
 case "$TRAINING_RECIPE" in
-  readoc_r0|replay_r1|pmc_s10|trusted_title|legacy_20260823) ;;
+  readoc_r0|replay_r1|pmc_s10|trusted_title|readoc_view_ablation|legacy_20260823) ;;
   *) echo "invalid TRAINING_RECIPE: $TRAINING_RECIPE" >&2; exit 2 ;;
 esac
 
@@ -76,6 +114,12 @@ case "$TRAINING_RECIPE" in
   trusted_title)
     if [[ "$LOSS_MODE" == "title_mask" ]]; then
       echo "trusted_title permits full_ce, uniform_ce, or title_weighted; title_mask is historical" >&2
+      exit 2
+    fi
+    ;;
+  readoc_view_ablation)
+    if [[ "$LOSS_MODE" != "full_ce" && "$LOSS_MODE" != "title_weighted" ]]; then
+      echo "readoc_view_ablation permits full_ce or title_weighted only" >&2
       exit 2
     fi
     ;;
@@ -130,7 +174,6 @@ if [[ ! -f "$TRAIN_JSONL" || ! -f "$VAL_JSONL" ]]; then
 fi
 
 "$PYTHON_BIN" "$BUNDLE_ROOT/scripts/validate_reviewed_jsonl.py" "$TRAIN_JSONL" "$VAL_JSONL"
-RECIPE_REPORT=${RECIPE_REPORT:-$OUTPUT_DIR.recipe_audit.json}
 RECIPE_ARGS=(
   --recipe "$TRAINING_RECIPE"
   --report "$RECIPE_REPORT"

@@ -2,7 +2,7 @@
 
 > **历史 payload 状态，不能作为当前训练准入。** 2026-08-26 审计确认 PMC 标题 silver 没有覆盖正文、公式、
 > 表格、图片资源或跨页 merge 质量，旧 full/single natural union 已停用。下面的数量和 SHA 契约仅用于复现旧
-> 4,524-row 快照；当前 recipe 见 [`../TRAINING_PLAN_ZH.md`](../TRAINING_PLAN_ZH.md)。
+> 4,524-row 快照；当前训练约定见 [`../README.md`](../README.md)（`TRAINING_PLAN_ZH.md` 已于 2026-09-03 删除）。
 
 快照日期：2026-08-23。这里随上传 ZIP 携带标题处理产物，但不携带 PDF、渲染页图或模型权重。
 三个 payload 目录在 posttrain Git 中被忽略；打包脚本会显式检查并收入 ZIP，Git 提交本身不携带这些大文件。
@@ -60,7 +60,7 @@ PDF 和渲染页图不进 ZIP。映射不是文件名猜测，而是以下闭环
 
 ## `train_short.jsonl` 不是单页集
 
-本地核验的 `/Users/guofengjiao/Downloads/train_short.jsonl` 共 1,364 条，全部来自 READoc 且 doc_id 全部
+本地核验的 `$LEGACY_READOC_SHORT_JSONL` 共 1,364 条，全部来自 READoc 且 doc_id 全部
 与上述 READoc 清单重合。图片数为 1-10 页，只有 2 条单图，中位数 5 页。它只是 READoc 的短长度子集，
 不随正式三池重复打包，也不能混入 READoc full。
 

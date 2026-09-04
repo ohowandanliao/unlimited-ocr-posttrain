@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Historical 2026-08-25 reproduction tool: serve legacy OCR adapters.
+"""Serve the Unlimited-OCR base model and trained OCR adapters.
 
 Serve base Unlimited-OCR and two LoRA adapters on one GPU.
 
@@ -41,7 +41,7 @@ class InferRequest(BaseModel):
     model: str = BASE_MODEL_NAME
     image_paths: list[str] = Field(min_length=1)
     prompt: str | None = None
-    max_length: int = Field(default=32768, ge=1, le=32768)
+    max_length: int = Field(default=20480, ge=1, le=32768)
     no_repeat_ngram_size: int = Field(default=35, ge=0, le=128)
     ngram_window: int | None = Field(default=None, ge=0, le=32768)
     temperature: float = Field(default=0.0, ge=0.0, le=2.0)
@@ -230,11 +230,6 @@ def create_app(service: OCRService) -> FastAPI:
         return {
             "status": "ok",
             "models": sorted(MODEL_NAMES),
-            "base_model": str(service.base_model_path),
-            "adapters": {
-                model_name: str(service.adapter_paths[model_name])
-                for model_name in sorted(service.adapter_paths)
-            },
             "device": str(service.device),
             "trained_generation": "peft_model.generate",
             "prompts": {
@@ -270,7 +265,7 @@ def main() -> None:
     parser.add_argument("--full-ce-adapter", type=Path, required=True)
     parser.add_argument("--title-weighted-adapter", type=Path, required=True)
     parser.add_argument("--device", default="cuda:0")
-    parser.add_argument("--host", default="0.0.0.0")
+    parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=18080)
     args = parser.parse_args()
 

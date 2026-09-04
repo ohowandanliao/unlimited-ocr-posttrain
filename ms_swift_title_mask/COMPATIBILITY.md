@@ -1,9 +1,9 @@
 # Compatibility contract
 
-Tested source checkouts:
+Tested public source checkouts:
 
-- ms-swift: `1a1ba3ee86488af323ef9b64ca3d34edee90ab11`
-- Unlimited-OCR repository: `d49ff64afffc1f47ab563dc1c589bc2f78808fa4`
+- [modelscope/ms-swift](https://github.com/modelscope/ms-swift): `1a1ba3ee86488af323ef9b64ca3d34edee90ab11`
+- [baidu/Unlimited-OCR](https://github.com/baidu/Unlimited-OCR): `d49ff64afffc1f47ab563dc1c589bc2f78808fa4`
 
 The plugin depends on these ms-swift behaviors:
 
@@ -16,5 +16,6 @@ The plugin depends on these ms-swift behaviors:
 5. Unlimited-OCR training uses `transformers==4.46.3`; the tokenizer must be fast and return character offsets.
 6. Sequence parallelism, FSDP, DeepSpeed, packing, Liger CE, and DFT loss are outside this bundle's tested custom-loss contract.
 
-Run `scripts/run_preflight.sh` after every ms-swift update. Do not use
-`ALLOW_UNTESTED_MS_SWIFT=1` until the changed template and trainer code have been reviewed and the integration tests rerun.
+After every ms-swift update, review the changed template and trainer code against this contract and rerun the
+integration tests before training. The removed compatibility scripts and `ALLOW_UNTESTED_MS_SWIFT` override are
+not part of the current interface.

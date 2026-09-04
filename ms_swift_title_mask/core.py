@@ -14,6 +14,19 @@ EXPECTED_CHANNEL = "title_reviewed"
 SINGLE_PAGE_PROMPT = "<image>document parsing."
 MULTI_PAGE_PROMPT = "<image>Multi page merge."
 EXPECTED_PROMPTS = frozenset({SINGLE_PAGE_PROMPT, MULTI_PAGE_PROMPT})
+MINERU_HEADING_PRIOR_INSTRUCTION = (
+    "The following headings are extracted from the MinerU parsing result of the same document.\n"
+    "Use them only as structural hints.\n"
+    "Verify and correct the heading text, heading levels, ordering, and document structure "
+    "according to the document images.\n"
+    "Do not blindly copy the MinerU headings if they conflict with the document images."
+)
+MINERU_HEADING_PRIOR_PREFIX = (
+    f"{MULTI_PAGE_PROMPT}\n\n"
+    f"{MINERU_HEADING_PRIOR_INSTRUCTION}\n\n"
+    "### MinerU headings\n"
+)
+MINERU_HEADING_PRIOR_SUFFIX = "\n\n### Final corrected Markdown\n"
 HUMAN_ACCEPTED = "HUMAN_ACCEPTED"
 SILVER_ACCEPTED = "SILVER_ACCEPTED"
 ACCEPTED_TITLE_STATUSES = frozenset({HUMAN_ACCEPTED, SILVER_ACCEPTED})
@@ -48,6 +61,32 @@ def canonicalize_target(text: str) -> str:
 
 def sha256_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def canonicalize_prompt_image_prefix(prompt: object) -> object:
+    """Collapse a multi-page prompt's repeated image placeholders to one."""
+    if not isinstance(prompt, str) or not prompt.startswith("<image>"):
+        return prompt
+    remainder = prompt
+    while remainder.startswith("<image>"):
+        remainder = remainder[len("<image>") :]
+    return "<image>" + remainder
+
+
+def is_mineru_heading_prior_prompt(prompt: object) -> bool:
+    """Return whether prompt is the reviewed MinerU heading-prior format."""
+    prompt = canonicalize_prompt_image_prefix(prompt)
+    if not isinstance(prompt, str) or not prompt.startswith(MINERU_HEADING_PRIOR_PREFIX):
+        return False
+    if not prompt.endswith(MINERU_HEADING_PRIOR_SUFFIX):
+        return False
+    heading_text = prompt[len(MINERU_HEADING_PRIOR_PREFIX) : -len(MINERU_HEADING_PRIOR_SUFFIX)]
+    return bool(heading_text.strip())
+
+
+def is_supported_prompt(prompt: object) -> bool:
+    prompt = canonicalize_prompt_image_prefix(prompt)
+    return prompt in EXPECTED_PROMPTS or is_mineru_heading_prior_prompt(prompt)
 
 
 def _line_starts(text: str) -> List[int]:
@@ -139,14 +178,18 @@ def validate_conversation(
     if user.get("role") != "user" or assistant.get("role") != "assistant":
         raise TitleMaskError("messages must be [user, assistant]")
     prompt = user.get("content")
-    if prompt not in EXPECTED_PROMPTS:
-        raise TitleMaskError(f"prompt must be one of {sorted(EXPECTED_PROMPTS)!r}; got {prompt!r}")
+    if not is_supported_prompt(prompt):
+        raise TitleMaskError(
+            "prompt must be a supported Unlimited-OCR prompt or MinerU heading-prior prompt; "
+            f"got {prompt!r}"
+        )
+    canonical_prompt = canonicalize_prompt_image_prefix(prompt)
     if image_count is not None:
         if not isinstance(image_count, int) or isinstance(image_count, bool) or image_count <= 0:
             raise TitleMaskError("image_count must be a positive integer")
-        if prompt == SINGLE_PAGE_PROMPT and image_count != 1:
+        if canonical_prompt == SINGLE_PAGE_PROMPT and image_count != 1:
             raise TitleMaskError("single-page prompt requires exactly one image")
-        if prompt == MULTI_PAGE_PROMPT and image_count < 2:
+        if canonical_prompt != SINGLE_PAGE_PROMPT and image_count < 2:
             raise TitleMaskError("multi-page prompt requires at least two images")
     response = assistant.get("content")
     if not isinstance(response, str):

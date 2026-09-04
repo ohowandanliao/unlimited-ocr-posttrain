@@ -18,7 +18,9 @@ from ms_swift_title_mask.core import TitleMaskError  # noqa: E402
 from ms_swift_title_mask.data_contract import read_jsonl, validate_training_row  # noqa: E402
 
 
-RECIPE_CHOICES = ("readoc_r0", "replay_r1", "pmc_s10", "trusted_title", "legacy_20260823")
+RECIPE_CHOICES = (
+    "readoc_r0", "replay_r1", "pmc_s10", "trusted_title", "readoc_view_ablation", "legacy_20260823"
+)
 _CJK_RE = re.compile(r"[\u3400-\u9fff]")
 _MISSING_ASSET_RE = re.compile(r"!\[[^\]]*\]\((?!https?://|data:)[^\n)]+\)")
 _XML_IMAGE_RE = re.compile(r"<(?:img|graphic)\b", re.IGNORECASE)
@@ -246,6 +248,18 @@ def validate_recipe(report: dict, args: argparse.Namespace) -> None:
         if disallowed_pmc_content:
             raise TitleMaskError(
                 f"trusted_title has unaccepted PMC content status: {disallowed_pmc_content}"
+            )
+    elif args.recipe == "readoc_view_ablation":
+        if set(family_share) != {"readoc"}:
+            raise TitleMaskError(f"readoc_view_ablation must contain only READoc; got {family_share}")
+        if sample_forms != {"full_document"}:
+            raise TitleMaskError(
+                f"readoc_view_ablation requires full_document rows; got {sorted(sample_forms)}"
+            )
+        if set(report["title_review_statuses"]) != {"SILVER_ACCEPTED"}:
+            raise TitleMaskError(
+                "readoc_view_ablation requires rule-derived SILVER_ACCEPTED headings; "
+                f"got {report['title_review_statuses']}"
             )
     else:  # pragma: no cover - argparse owns the enum
         raise AssertionError(args.recipe)

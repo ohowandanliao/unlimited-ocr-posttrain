@@ -3,7 +3,7 @@
 > **标题审计资料，不是完整正文训练准入。** 后续发现旧训练 builder 没有消费本文件的
 > `content_quarantine.jsonl`，并把标题 `SILVER_ACCEPTED` 错当成 full/single 正文已接受。本文的标题候选、
 > source SHA 和内容风险统计继续有效，但旧 PMC JSONL 不得直接进入新训练。当前方案见
-> [`training_optimization_2026-08-26.md`](training_optimization_2026-08-26.md)。
+> [posttrain_weekly_report_2026-08-30.md §5](posttrain_weekly_report_2026-08-30.md#5-下一步计划)。
 
 ## 结论
 
@@ -42,7 +42,7 @@ PDF 与 Markdown 错位。
 输入目录：
 
 ```text
-/Users/guofengjiao/Documents/pmc_v26_pdf_gt_20260816/
+$PMC_SOURCE_ROOT/
   documents/<pmcid>/middle.json
   documents/<pmcid>/document.pdf
 ```
@@ -91,8 +91,8 @@ tests/test_pmc_title_rules.py
 
 ```bash
 python scripts/data/build_pmc_title_candidates.py \
-  --input-root /Users/guofengjiao/Documents/pmc_v26_pdf_gt_20260816 \
-  --output-root /Users/guofengjiao/Documents/pmc_v26_pdf_gt_20260816_processed_title_gt_v1 \
+  --input-root "$PMC_SOURCE_ROOT" \
+  --output-root "$PMC_TITLE_CANDIDATES_ROOT" \
   --review-shard-size 500
 ```
 
@@ -105,7 +105,7 @@ python scripts/data/build_pmc_title_candidates.py \
 最终输出位于：
 
 ```text
-/Users/guofengjiao/Documents/pmc_v26_pdf_gt_20260816_processed_title_gt_v1/
+$PMC_TITLE_CANDIDATES_ROOT/
   document_manifest.jsonl
   title_candidates.jsonl
   review_queue.jsonl
