@@ -1,0 +1,997 @@
+{
+ "generated_at": "2026-09-18 17:05:56",
+ "tokenizer_path": "/home/jovyan/hyx/models/Unlimited-OCR",
+ "eos_token": "<｜end▁of▁sentence｜>",
+ "eos_token_id": 1,
+ "datasets": {
+  "pmc-fullce-16k": {
+   "total_lines": 9284,
+   "prompt_value_counts": {
+    "'<image>Multi page merge.'": 8911,
+    "'<image>document parsing.'": 373
+   },
+   "channel_counts": {
+    "title_reviewed": 9284
+   },
+   "n_merge": 8911,
+   "n_nonmerge": 373,
+   "merge_pages_stats": {
+    "min": 2.0,
+    "max": 20.0,
+    "mean": 9.2,
+    "p50": 10.0,
+    "p90": 13.0,
+    "p95": 14.0,
+    "p99": 15.0
+   },
+   "merge_pages_buckets": {
+    "1": 0,
+    "2": 400,
+    "3": 356,
+    "4": 356,
+    "5": 372,
+    "6-10": 3758,
+    ">10": 3669
+   },
+   "all_pages_stats": {
+    "min": 1.0,
+    "max": 20.0,
+    "mean": 8.87,
+    "p50": 10.0,
+    "p90": 13.0,
+    "p95": 14.0,
+    "p99": 15.0
+   },
+   "target_tokens": {
+    "min": 360.0,
+    "max": 13487.0,
+    "mean": 8083.11,
+    "p50": 9098.0,
+    "p90": 12077.0,
+    "p95": 12462.0,
+    "p99": 13000.34
+   },
+   "est_total_gt_16384": {
+    "count": 5,
+    "frac": 0.000539
+   },
+   "est_total_gt_32768": {
+    "count": 0,
+    "frac": 0.0
+   },
+   "target_eos_string_hits": 0,
+   "page_pattern_hits": {
+    "input": {
+     "<page": 0,
+     "<PAGE": 0,
+     "PAGE>": 0
+    },
+    "target": {
+     "<page": 0,
+     "<PAGE": 0,
+     "PAGE>": 0
+    },
+    "example_ids": {}
+   },
+   "gram_repetition": {
+    "8": {
+     "ge2": 0.995153,
+     "ge5": 0.774558,
+     "ge20": 0.185373,
+     "p50": 8.0,
+     "p90": 28.0,
+     "p99": 76.0,
+     "max": 344.0
+    },
+    "16": {
+     "ge2": 0.913507,
+     "ge5": 0.327445,
+     "ge20": 0.031237
+    },
+    "32": {
+     "ge2": 0.577768,
+     "ge5": 0.075399,
+     "ge20": 0.002801
+    }
+   },
+   "line_dup": {
+    "count_based_ge0.2": 0.004632,
+    "count_based_ge0.5": 0.0,
+    "char_weighted_ge0.2": 0.000108,
+    "char_weighted_ge0.5": 0.0
+   }
+  },
+  "readoc-view-16k": {
+   "total_lines": 1706,
+   "prompt_value_counts": {
+    "'<image>Multi page merge.'": 1706
+   },
+   "channel_counts": {
+    "title_reviewed": 1706
+   },
+   "n_merge": 1706,
+   "n_nonmerge": 0,
+   "merge_pages_stats": {
+    "min": 2.0,
+    "max": 35.0,
+    "mean": 7.02,
+    "p50": 6.0,
+    "p90": 12.0,
+    "p95": 15.0,
+    "p99": 20.0
+   },
+   "merge_pages_buckets": {
+    "1": 0,
+    "2": 105,
+    "3": 165,
+    "4": 190,
+    "5": 233,
+    "6-10": 750,
+    ">10": 263
+   },
+   "all_pages_stats": {
+    "min": 2.0,
+    "max": 35.0,
+    "mean": 7.02,
+    "p50": 6.0,
+    "p90": 12.0,
+    "p95": 15.0,
+    "p99": 20.0
+   },
+   "target_tokens": {
+    "min": 225.0,
+    "max": 13643.0,
+    "mean": 3689.9,
+    "p50": 2591.5,
+    "p90": 8480.0,
+    "p95": 10116.5,
+    "p99": 12202.8
+   },
+   "est_total_gt_16384": {
+    "count": 0,
+    "frac": 0.0
+   },
+   "est_total_gt_32768": {
+    "count": 0,
+    "frac": 0.0
+   },
+   "target_eos_string_hits": 0,
+   "page_pattern_hits": {
+    "input": {
+     "<page": 0,
+     "<PAGE": 0,
+     "PAGE>": 0
+    },
+    "target": {
+     "<page": 0,
+     "<PAGE": 0,
+     "PAGE>": 0
+    },
+    "example_ids": {}
+   },
+   "gram_repetition": {
+    "8": {
+     "ge2": 0.916178,
+     "ge5": 0.487104,
+     "ge20": 0.058617,
+     "p50": 4.0,
+     "p90": 14.0,
+     "p99": 42.0,
+     "max": 162.0
+    },
+    "16": {
+     "ge2": 0.702227,
+     "ge5": 0.150645,
+     "ge20": 0.007034
+    },
+    "32": {
+     "ge2": 0.369871,
+     "ge5": 0.034584,
+     "ge20": 0.001172
+    }
+   },
+   "line_dup": {
+    "count_based_ge0.2": 0.17585,
+    "count_based_ge0.5": 0.007034,
+    "char_weighted_ge0.2": 0.001172,
+    "char_weighted_ge0.5": 0.0
+   }
+  },
+  "pmc-readoc-spage-16k": {
+   "total_lines": 12990,
+   "prompt_value_counts": {
+    "'<image>Multi page merge.'": 10617,
+    "'<image>document parsing.'": 2373
+   },
+   "channel_counts": {
+    "title_reviewed": 12990
+   },
+   "n_merge": 10617,
+   "n_nonmerge": 2373,
+   "merge_pages_stats": {
+    "min": 2.0,
+    "max": 35.0,
+    "mean": 8.85,
+    "p50": 9.0,
+    "p90": 13.0,
+    "p95": 14.0,
+    "p99": 16.0
+   },
+   "merge_pages_buckets": {
+    "1": 0,
+    "2": 505,
+    "3": 521,
+    "4": 546,
+    "5": 605,
+    "6-10": 4508,
+    ">10": 3932
+   },
+   "all_pages_stats": {
+    "min": 1.0,
+    "max": 35.0,
+    "mean": 7.41,
+    "p50": 8.0,
+    "p90": 13.0,
+    "p95": 13.0,
+    "p99": 16.0
+   },
+   "target_tokens": {
+    "min": 194.0,
+    "max": 13643.0,
+    "mean": 6400.73,
+    "p50": 7193.5,
+    "p90": 11791.0,
+    "p95": 12314.649999999998,
+    "p99": 12923.0
+   },
+   "est_total_gt_16384": {
+    "count": 5,
+    "frac": 0.000385
+   },
+   "est_total_gt_32768": {
+    "count": 0,
+    "frac": 0.0
+   },
+   "target_eos_string_hits": 0,
+   "page_pattern_hits": {
+    "input": {
+     "<page": 0,
+     "<PAGE": 0,
+     "PAGE>": 0
+    },
+    "target": {
+     "<page": 0,
+     "<PAGE": 0,
+     "PAGE>": 0
+    },
+    "example_ids": {}
+   },
+   "gram_repetition": {
+    "8": {
+     "ge2": 0.980062,
+     "ge5": 0.653657,
+     "ge20": 0.140493,
+     "p50": 6.0,
+     "p90": 24.0,
+     "p99": 68.0,
+     "max": 344.0
+    },
+    "16": {
+     "ge2": 0.811393,
+     "ge5": 0.257506,
+     "ge20": 0.023326
+    },
+    "32": {
+     "ge2": 0.468591,
+     "ge5": 0.059276,
+     "ge20": 0.002156
+    }
+   },
+   "line_dup": {
+    "count_based_ge0.2": 0.028022,
+    "count_based_ge0.5": 0.000924,
+    "char_weighted_ge0.2": 0.000231,
+    "char_weighted_ge0.5": 0.0
+   }
+  }
+ },
+ "mix_subsets": {
+  "pmc": {
+   "n_rows": 9284,
+   "n_merge": 8911,
+   "merge_pages_stats": {
+    "min": 2.0,
+    "max": 20.0,
+    "mean": 9.2,
+    "p50": 10.0,
+    "p90": 13.0,
+    "p95": 14.0,
+    "p99": 15.0
+   },
+   "merge_pages_buckets": {
+    "1": 0,
+    "2": 400,
+    "3": 356,
+    "4": 356,
+    "5": 372,
+    "6-10": 3758,
+    ">10": 3669
+   },
+   "target_tokens": {
+    "min": 360.0,
+    "max": 13487.0,
+    "mean": 8083.11,
+    "p50": 9098.0,
+    "p90": 12077.0,
+    "p95": 12462.0,
+    "p99": 13000.34
+   }
+  },
+  "spage": {
+   "n_rows": 2000,
+   "n_merge": 0,
+   "merge_pages_stats": {},
+   "merge_pages_buckets": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6-10": 0,
+    ">10": 0
+   },
+   "target_tokens": {
+    "min": 194.0,
+    "max": 1326.0,
+    "mean": 903.48,
+    "p50": 916.0,
+    "p90": 1061.0,
+    "p95": 1097.0,
+    "p99": 1168.0
+   }
+  },
+  "readoc": {
+   "n_rows": 1706,
+   "n_merge": 1706,
+   "merge_pages_stats": {
+    "min": 2.0,
+    "max": 35.0,
+    "mean": 7.02,
+    "p50": 6.0,
+    "p90": 12.0,
+    "p95": 15.0,
+    "p99": 20.0
+   },
+   "merge_pages_buckets": {
+    "1": 0,
+    "2": 105,
+    "3": 165,
+    "4": 190,
+    "5": 233,
+    "6-10": 750,
+    ">10": 263
+   },
+   "target_tokens": {
+    "min": 225.0,
+    "max": 13643.0,
+    "mean": 3689.9,
+    "p50": 2591.5,
+    "p90": 8480.0,
+    "p95": 10116.5,
+    "p99": 12202.8
+   }
+  }
+ },
+ "special_tokens_page_image_ref_det": {
+  "count": 5,
+  "items": [
+   [
+    "<image>",
+    128815
+   ],
+   [
+    "<|ref|>",
+    128816
+   ],
+   [
+    "<|/ref|>",
+    128817
+   ],
+   [
+    "<|det|>",
+    128818
+   ],
+   [
+    "<|/det|>",
+    128819
+   ]
+  ]
+ },
+ "reconciliation_meta_300": {
+  "n": 300,
+  "seed": 1234,
+  "target_sha256_mismatch": 0,
+  "target_tokens_mismatch": 0,
+  "prompt_tokens_mismatch": 300,
+  "visual_tokens_vs_273xpages_mismatch": 0,
+  "total_tokens_sum_mismatch": 300,
+  "n_pages_vs_len_images_mismatch": 0,
+  "fits_16k_false_rows_in_sample": 0
+ },
+ "reconciliation_manifest_300": {
+  "n": 300,
+  "seed": 5678,
+  "manifest_lines": 10292,
+  "ids_missing_in_train": 30,
+  "target_tokens_mismatch": 0,
+  "target_sha256_mismatch": 0
+ },
+ "samples": [
+  {
+   "_which": "pmc-fullce-16k median-pages merge",
+   "id": "pmc_pmc10000488",
+   "pages": 10,
+   "prompt": "<image>Multi page merge.",
+   "target_tokens_measured": 11256,
+   "target_tokens_meta": 11256,
+   "target_chars": 44790,
+   "target_first_500": "Review\n\n# The Secondary Myelodysplastic Neoplasms (MDS) Jigsaw\n\nCalvete Oriol 1 *\n\nhttps://orcid.org/0000-0002-4809-3897 Mestre Julia 1\n\nJerez Andrés 2\n\nhttps://orcid.org/0000-0002-3251-2161 Solé Francesc 1\n\nMontuenga Luis Academic Editor\n\nCastro Elena Academic Editor\n\nMaraver Antonio Academic Editor\n\n1 MDS Group, Institut de Recerca Contra la Leucèmia Josep Carreras, 08916 Barcelona, Spain\n\n2 Experimental Hematology Unit, Department of Hematology, Vall d’Hebron Institute of Oncology (VHIO), Uni",
+   "target_mid_500": "ic predisposition must be considered beyond bone marrow syndromes [12]. Likewise, CHIP may be initiated, expanded or triggered by cytotoxic therapy [67]; however, both CHIP and treatment for the primary tumor could also coexist with no association. In addition, different mutational burdens and their correlation with CHIP-related mutations are different for different hematological malignancies [68]. Thus, different MDS subtypes may be expected in different combinations of cytotoxic effects togeth",
+   "target_last_500": " complex karyotypes</bold> </td><td>Not described</td><td>Not described</td><td>del(5q), −7/del(7q), −18/−18q (7%), +8, −20q.<br/>Other: +1/+1q, −5, +11, −13/13q−, −17/17p−, −21, +mar [27]</td><td>−5/del(5q), −7/del(7q)<br/>Other: der(21q), +8, der(12q), t(1;7), −12, der(17q), der(3q), der(3q), and −18 [22]</td></tr></tbody></table>\n\n* Three or more cytogenetic alterations. MDS: myelodysplastic neoplasm; CHIP: clonal hematopoiesis of indeterminate potential; MDS-pCT: MDS post-cytotoxic therapy.\n",
+   "last_12_token_ids": [
+    10525,
+    3095,
+    5272,
+    28,
+    373,
+    10525,
+    2411,
+    15,
+    70318,
+    57928,
+    8444,
+    603
+   ],
+   "roundtrip_decode200_eq": true
+  },
+  {
+   "_which": "pmc-fullce-16k longest-target",
+   "id": "pmc_pmc10538276",
+   "pages": 10,
+   "prompt": "<image>Multi page merge.",
+   "target_tokens_measured": 13487,
+   "target_tokens_meta": 13487,
+   "target_chars": 49148,
+   "target_first_500": "VirologyEpidemiologyImmunologyInfectious DiseasesCOVID-19\n\n# Seroprevalence of SARS-CoV-2 anti-spike IgG antibody among COVID-19 vaccinated individuals residing in Surabaya, East Java, Indonesia\n\nhttp://orcid.org/0000-0002-4452-5250 Megasari Ni Luh Ayu 1 2\n\nYamani Laura Navika 2 3\n\nJuniastuti Juniastuti 2 4\n\nLusida Maria Inge 2 4\n\nMori Yasuko 5 ymori@med.kobe-u.ac.jp\n\n1 Postgraduate School, Universitas Airlangga, Surabaya, East Java, Indonesia\n\n2 Indonesia-Japan Collaborative Research Center for",
+   "target_mid_500": "investigations on Indonesian healthcare workers receiving two-dose CoronaVac and one dose of Moderna booster also showed 100% anti-SARS-CoV-2 antibodies positivity (Cucunawangsih et al., 2022; Hidayat et al., 2022; Sinto et al., 2023).\n\nTime after the last dose of vaccination significantly affected the anti-S-IgG antibody positivity, especially of CoronaVac recipients. A total of 3 months after vaccination, anti-S-IgG seronegativity turned to be around 20–38.5%, compared to 3.4% and 7.8% in the ",
+   "target_last_500": "rris G Mallick B Eeles P Hay J VanSteenhouse H Lee J Antibody responses to SARS-CoV-2 vaccines in 45,965 adults from the general population of the United Kingdom Nature Microbiology 2021 6 9 1140 1149\n\nWisnewski, Campillo Luna & Redlich (2021) Wisnewski AV Campillo Luna J Redlich CA Human IgG and IgA responses to COVID-19 mRNA vaccines PLOS ONE 2021 16 6 e0249499\n\nWorld Health Organization (2022) World Health Organization Coronavirus disease (COVID-19): vaccines 2022 (accessed 16 December 2022)\n",
+   "last_12_token_ids": [
+    223,
+    939,
+    20,
+    343,
+    54396,
+    223,
+    926,
+    5899,
+    223,
+    939,
+    20,
+    682
+   ],
+   "roundtrip_decode200_eq": true
+  },
+  {
+   "_which": "readoc-view-16k median-pages merge",
+   "id": "readoc_arxiv_1805.05913",
+   "pages": 6,
+   "prompt": "<image>Multi page merge.",
+   "target_tokens_measured": 5444,
+   "target_tokens_meta": null,
+   "target_chars": 25243,
+   "target_first_500": "# Pre-Hospital Management of Acute Myocardial Infarction Using Tele-Electrocardiography System\n\nMasoud Elhami Asl1,*, Masoomeh Rahimpour1, Mahmoud Reza Merati1,\nAmir Hossein Panahi1,2, and Kamran Gholami1\n\n1 Pooyandegan Rah Saadat Co., Tehran, Iran.\n2 IRAN Telecom Research Center, Tehran, Iran.\n\n###### Abstract\n\n_Abstract_— A comprehensive survey revealed that many patients of Acute Myocardial Infarction reach to the hospital so late to deliver an effective treatment. This leads to poor treatmen",
+   "target_mid_500": "he type of QRS complex is done according to the initial estimation of peak points on each complex known as \\(PK_{i}\\); these points are the candidates of Q, R, S and R’ waves according to their amplitude and upward or downward slopes. After type declaration of QRS complex, the onset and offset points of QRS wave have been determined within the windows locating according to the R wave location. In order to detect P and T wave boundaries, the information of slope signal has been used. Using moving",
+   "target_last_500": "etation system for primary care physicians in a community hospital,” _The Journal of the American Board of Family Practice_, vol. 2, no. 1, pp. 17–24, 1989.\n* [16] H. M. Krumholz, E. H. Bradley, B. K. Nallamothu, H. H. Ting, W. B. Batchelor, E. Kline-Rogers, A. F. Stern, J. R. Byrd, and J. E. Brush, “A campaign to improve the timeliness of primary percutaneous coronary intervention: Door-to-balloon: An alliance for quality,” _JACC: Cardiovascular Interventions_, vol. 1, no. 1, pp. 97–104, 2008.\n",
+   "last_12_token_ids": [
+    14,
+    5727,
+    16,
+    223,
+    5106,
+    1127,
+    7163,
+    14,
+    223,
+    792,
+    26,
+    603
+   ],
+   "roundtrip_decode200_eq": true
+  }
+ ],
+ "swift_template_suffix": {
+  "type": "TemplateMeta",
+  "suffix_repr": "[['eos_token_id']]",
+  "suffix_len": 1,
+  "equals_eos_only": false,
+  "eos_repr": "'<｜end▁of▁sentence｜>'",
+  "extra_attrs": [
+   "prefix",
+   "prompt",
+   "chat_sep"
+  ]
+ },
+ "meta_keys": {
+  "pmc-fullce-16k": [
+   "bucket",
+   "build_date",
+   "cleaning_version",
+   "dataset",
+   "doc_id",
+   "fits_16k",
+   "fits_32k",
+   "gt_path",
+   "n_pages",
+   "page_indices",
+   "pdf_path",
+   "prompt_tokens",
+   "row_sha256",
+   "sample_form",
+   "source",
+   "split",
+   "subset",
+   "target_chars",
+   "target_sha256",
+   "target_tokens",
+   "title_heading_count",
+   "title_review_id",
+   "title_review_status",
+   "title_review_version",
+   "title_reviewed_at",
+   "title_reviewer",
+   "title_ruleset_version",
+   "title_source_sha256",
+   "title_target_sha256",
+   "total_tokens",
+   "visual_tokens"
+  ],
+  "pmc-readoc-spage-16k": [
+   "bucket",
+   "build_date",
+   "cleaning_version",
+   "dataset",
+   "doc_id",
+   "fits_16k",
+   "fits_32k",
+   "gt_path",
+   "n_pages",
+   "page_indices",
+   "pdf_path",
+   "prompt_tokens",
+   "row_sha256",
+   "sample_form",
+   "source",
+   "split",
+   "subset",
+   "target_chars",
+   "target_sha256",
+   "target_tokens",
+   "title_heading_count",
+   "title_review_id",
+   "title_review_status",
+   "title_review_version",
+   "title_reviewed_at",
+   "title_reviewer",
+   "title_ruleset_version",
+   "title_source_sha256",
+   "title_target_sha256",
+   "total_tokens",
+   "visual_tokens"
+  ],
+  "readoc-view-16k": [
+   "dataset",
+   "doc_id",
+   "gt_path",
+   "n_pages",
+   "page_indices",
+   "pdf_path",
+   "recipe_mix_pool",
+   "sample_form",
+   "source",
+   "source_target_sha256",
+   "source_view_input_sha256",
+   "source_view_schema",
+   "split",
+   "subset",
+   "target_chars",
+   "title_heading_count",
+   "title_review_id",
+   "title_review_status",
+   "title_review_version",
+   "title_reviewed_at",
+   "title_reviewer",
+   "title_ruleset_version",
+   "title_source_sha256",
+   "title_target_sha256"
+  ]
+ },
+ "meta_population_stats": {
+  "pmc-fullce-16k": {
+   "n": 9284,
+   "prompt_tokens_by_value_and_prompt": {
+    "('3280', '<image>Multi page merge.')": 1152,
+    "('3007', '<image>Multi page merge.')": 1354,
+    "('3553', '<image>Multi page merge.')": 639,
+    "('2734', '<image>Multi page merge.')": 1197,
+    "('4099', '<image>Multi page merge.')": 135,
+    "('2461', '<image>Multi page merge.')": 970,
+    "('3826', '<image>Multi page merge.')": 304,
+    "('2188', '<image>Multi page merge.')": 669,
+    "('1915', '<image>Multi page merge.')": 500,
+    "('1642', '<image>Multi page merge.')": 422,
+    "('4372', '<image>Multi page merge.')": 49,
+    "('1369', '<image>Multi page merge.')": 372,
+    "('823', '<image>Multi page merge.')": 356,
+    "('1096', '<image>Multi page merge.')": 356,
+    "('550', '<image>Multi page merge.')": 400,
+    "('276', '<image>document parsing.')": 373,
+    "('4918', '<image>Multi page merge.')": 11,
+    "('4645', '<image>Multi page merge.')": 21,
+    "('5464', '<image>Multi page merge.')": 1,
+    "('5191', '<image>Multi page merge.')": 3
+   },
+   "visual_tokens_equals_273xpages_rows": 9284,
+   "n_pages_equals_len_images_rows": 9284,
+   "total_tokens_equals_sum_rows": 0,
+   "meta_total_tokens_gt_16384_rows": 3146,
+   "meta_total_tokens_gt_32768_rows": 0,
+   "meta_total_tokens_max": 21297.0,
+   "est273_metaprompt_gt_16384_rows": 3146,
+   "est273_metaprompt_gt_32768_rows": 0,
+   "nonmerge_rows": 373,
+   "nonmerge_pages": {
+    "1": 373
+   },
+   "all_rows_pages_counter_top": {
+    "11": 1354,
+    "10": 1197,
+    "12": 1152,
+    "9": 970,
+    "8": 669,
+    "13": 639,
+    "7": 500,
+    "6": 422,
+    "2": 400,
+    "1": 373,
+    "5": 372,
+    "3": 356
+   },
+   "note": "prompt_tokens_by_value uses meta.prompt_tokens which INCLUDES visual tokens (273*pages+text prompt); see est_total_measured_variants"
+  },
+  "pmc-readoc-spage-16k": {
+   "n": 12990,
+   "prompt_tokens_by_value_and_prompt": {
+    "('3280', '<image>Multi page merge.')": 1152,
+    "('3007', '<image>Multi page merge.')": 1354,
+    "('3553', '<image>Multi page merge.')": 639,
+    "('2734', '<image>Multi page merge.')": 1197,
+    "('4099', '<image>Multi page merge.')": 135,
+    "('2461', '<image>Multi page merge.')": 970,
+    "('3826', '<image>Multi page merge.')": 304,
+    "('2188', '<image>Multi page merge.')": 669,
+    "('1915', '<image>Multi page merge.')": 500,
+    "('1642', '<image>Multi page merge.')": 422,
+    "('4372', '<image>Multi page merge.')": 49,
+    "('1369', '<image>Multi page merge.')": 372,
+    "('823', '<image>Multi page merge.')": 356,
+    "('1096', '<image>Multi page merge.')": 356,
+    "('550', '<image>Multi page merge.')": 400,
+    "('276', '<image>document parsing.')": 2373,
+    "('4918', '<image>Multi page merge.')": 11,
+    "('4645', '<image>Multi page merge.')": 21,
+    "('5464', '<image>Multi page merge.')": 1,
+    "('5191', '<image>Multi page merge.')": 3,
+    "('None', '<image>Multi page merge.')": 1706
+   },
+   "visual_tokens_equals_273xpages_rows": 11284,
+   "n_pages_equals_len_images_rows": 12990,
+   "total_tokens_equals_sum_rows": 0,
+   "meta_total_tokens_gt_16384_rows": 3146,
+   "meta_total_tokens_gt_32768_rows": 0,
+   "meta_total_tokens_max": 21297.0,
+   "est273_metaprompt_gt_16384_rows": 3146,
+   "est273_metaprompt_gt_32768_rows": 0,
+   "nonmerge_rows": 2373,
+   "nonmerge_pages": {
+    "1": 2373
+   },
+   "all_rows_pages_counter_top": {
+    "1": 2373,
+    "11": 1415,
+    "10": 1279,
+    "12": 1206,
+    "9": 1084,
+    "8": 814,
+    "7": 677,
+    "13": 675,
+    "6": 654,
+    "5": 605,
+    "4": 546,
+    "3": 521
+   },
+   "note": "prompt_tokens_by_value uses meta.prompt_tokens which INCLUDES visual tokens (273*pages+text prompt); see est_total_measured_variants"
+  },
+  "readoc-view-16k": {
+   "n": 1706,
+   "prompt_tokens_by_value_and_prompt": {
+    "('None', '<image>Multi page merge.')": 1706
+   },
+   "visual_tokens_equals_273xpages_rows": 0,
+   "n_pages_equals_len_images_rows": 1706,
+   "total_tokens_equals_sum_rows": 0,
+   "meta_total_tokens_gt_16384_rows": 0,
+   "meta_total_tokens_gt_32768_rows": 0,
+   "meta_total_tokens_max": 0.0,
+   "est273_metaprompt_gt_16384_rows": 0,
+   "est273_metaprompt_gt_32768_rows": 0,
+   "nonmerge_rows": 0,
+   "nonmerge_pages": {},
+   "all_rows_pages_counter_top": {
+    "5": 233,
+    "6": 232,
+    "4": 190,
+    "7": 177,
+    "3": 165,
+    "8": 145,
+    "9": 114,
+    "2": 105,
+    "10": 82,
+    "11": 61,
+    "12": 54,
+    "13": 36
+   },
+   "note": "prompt_tokens_by_value uses meta.prompt_tokens which INCLUDES visual tokens (273*pages+text prompt); see est_total_measured_variants"
+  }
+ },
+ "full_reconciliation_pmc_meta": {
+  "n": 9284,
+  "target_sha256_mismatch": 0,
+  "mismatch_ids": []
+ },
+ "manifest_full": {
+  "manifest_lines": 10292,
+  "ids_present_in_train": 9284,
+  "ids_missing_in_train": 1008,
+  "missing_total_tokens_min_p50_max": [
+   638.0,
+   12014.5,
+   16378.0
+  ],
+  "missing_total_tokens_over_16384": 0,
+  "present_target_tokens_mismatch_vs_meta": 0,
+  "present_target_sha256_mismatch_vs_meta": 0
+ },
+ "mix_subset_pages_counter": {
+  "pmc": {
+   "11": 1354,
+   "10": 1197,
+   "12": 1152,
+   "9": 970,
+   "8": 669,
+   "13": 639,
+   "7": 500,
+   "6": 422,
+   "2": 400,
+   "1": 373,
+   "5": 372,
+   "3": 356,
+   "4": 356,
+   "14": 304,
+   "15": 135
+  },
+  "spage": {
+   "1": 2000
+  },
+  "readoc": {
+   "5": 233,
+   "6": 232,
+   "4": 190,
+   "7": 177,
+   "3": 165,
+   "8": 145,
+   "9": 114,
+   "2": 105,
+   "10": 82,
+   "11": 61,
+   "12": 54,
+   "13": 36,
+   "14": 22,
+   "16": 21,
+   "15": 19
+  }
+ },
+ "est_total_measured_variants": {
+  "pmc-fullce-16k": {
+   "n": 9284,
+   "target_tokens_p50_p90_p95_max": [
+    9098.0,
+    12077.0,
+    12462.0,
+    13487.0
+   ],
+   "build_prompt_contrib_counter": {
+    "4": 8911,
+    "3": 373
+   },
+   "build_prompt_contrib_source": {
+    "meta": 9284
+   },
+   "estA_measured_prompt_gt16384": 5,
+   "estA_gt32768": 0,
+   "estB_build_prompt_gt16384": 0,
+   "estB_gt32768": 0,
+   "estB_over_ids": [],
+   "meta_total_rows_present": 9284,
+   "meta_total_equals_prompt_plus_target": 9284,
+   "meta_total_equals_visual_plus_prompt_plus_target": 0,
+   "meta_total_gt16384": 0,
+   "meta_total_gt32768": 0,
+   "meta_total_max": 16384.0,
+   "fits_16k_false": 0,
+   "fits_16k_missing": 0,
+   "fits_32k_true": 9284,
+   "meta_keys": [
+    "bucket",
+    "build_date",
+    "cleaning_version",
+    "dataset",
+    "doc_id",
+    "fits_16k",
+    "fits_32k",
+    "gt_path",
+    "n_pages",
+    "page_indices",
+    "pdf_path",
+    "prompt_tokens",
+    "row_sha256",
+    "sample_form",
+    "source",
+    "split",
+    "subset",
+    "target_chars",
+    "target_sha256",
+    "target_tokens",
+    "title_heading_count",
+    "title_review_id",
+    "title_review_status",
+    "title_review_version",
+    "title_reviewed_at",
+    "title_reviewer",
+    "title_ruleset_version",
+    "title_source_sha256",
+    "title_target_sha256",
+    "total_tokens",
+    "visual_tokens"
+   ]
+  },
+  "pmc-readoc-spage-16k": {
+   "n": 12990,
+   "target_tokens_p50_p90_p95_max": [
+    7193.5,
+    11791.0,
+    12314.649999999998,
+    13643.0
+   ],
+   "build_prompt_contrib_counter": {
+    "4": 10617,
+    "3": 2373
+   },
+   "build_prompt_contrib_source": {
+    "meta": 11284,
+    "fallback": 1706
+   },
+   "estA_measured_prompt_gt16384": 5,
+   "estA_gt32768": 0,
+   "estB_build_prompt_gt16384": 0,
+   "estB_gt32768": 0,
+   "estB_over_ids": [],
+   "meta_total_rows_present": 11284,
+   "meta_total_equals_prompt_plus_target": 11284,
+   "meta_total_equals_visual_plus_prompt_plus_target": 0,
+   "meta_total_gt16384": 0,
+   "meta_total_gt32768": 0,
+   "meta_total_max": 16384.0,
+   "fits_16k_false": 0,
+   "fits_16k_missing": 1706,
+   "fits_32k_true": 11284,
+   "meta_keys": [
+    "bucket",
+    "build_date",
+    "cleaning_version",
+    "dataset",
+    "doc_id",
+    "fits_16k",
+    "fits_32k",
+    "gt_path",
+    "n_pages",
+    "page_indices",
+    "pdf_path",
+    "prompt_tokens",
+    "row_sha256",
+    "sample_form",
+    "source",
+    "split",
+    "subset",
+    "target_chars",
+    "target_sha256",
+    "target_tokens",
+    "title_heading_count",
+    "title_review_id",
+    "title_review_status",
+    "title_review_version",
+    "title_reviewed_at",
+    "title_reviewer",
+    "title_ruleset_version",
+    "title_source_sha256",
+    "title_target_sha256",
+    "total_tokens",
+    "visual_tokens"
+   ]
+  },
+  "readoc-view-16k": {
+   "n": 1706,
+   "target_tokens_p50_p90_p95_max": [
+    2591.5,
+    8480.0,
+    10116.5,
+    13643.0
+   ],
+   "build_prompt_contrib_counter": {
+    "4": 1706
+   },
+   "build_prompt_contrib_source": {
+    "fallback": 1706
+   },
+   "estA_measured_prompt_gt16384": 0,
+   "estA_gt32768": 0,
+   "estB_build_prompt_gt16384": 0,
+   "estB_gt32768": 0,
+   "estB_over_ids": [],
+   "meta_total_rows_present": 0,
+   "meta_total_equals_prompt_plus_target": 0,
+   "meta_total_equals_visual_plus_prompt_plus_target": 0,
+   "meta_total_gt16384": null,
+   "meta_total_gt32768": null,
+   "meta_total_max": null,
+   "fits_16k_false": 0,
+   "fits_16k_missing": 1706,
+   "fits_32k_true": 0,
+   "meta_keys": [
+    "dataset",
+    "doc_id",
+    "gt_path",
+    "n_pages",
+    "page_indices",
+    "pdf_path",
+    "recipe_mix_pool",
+    "sample_form",
+    "source",
+    "source_target_sha256",
+    "source_view_input_sha256",
+    "source_view_schema",
+    "split",
+    "subset",
+    "target_chars",
+    "title_heading_count",
+    "title_review_id",
+    "title_review_status",
+    "title_review_version",
+    "title_reviewed_at",
+    "title_reviewer",
+    "title_ruleset_version",
+    "title_source_sha256",
+    "title_target_sha256"
+   ]
+  }
+ }
+}

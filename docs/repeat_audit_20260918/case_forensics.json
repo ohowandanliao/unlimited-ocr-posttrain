@@ -1,0 +1,516 @@
+{
+ "meta": {
+  "rule_source": "verify1.py fourboard(逐字复用); 严格=dup>=0.3或len>=2x",
+  "k_def": "k_strict=pred与GT token级公共前缀; k_eff=在pred中定位GT开头片段(先200,再80,再40字符,跳过前10字符)对齐后继续算公共前缀,即'跟随GT到哪一格才跑飞'",
+  "tokenizer": "/home/jovyan/hyx/models/Unlimited-OCR",
+  "route_dirs": {
+   "base": "/home/jovyan/hyx/uocr-ms-swift-title-mask/evaluation/readoc-view-16k_all129/pred_clean/base",
+   "fc": "/home/jovyan/hyx/uocr-ms-swift-title-mask/evaluation/readoc-view-16k_all129/pred_clean/full-ce",
+   "pmc": "/home/jovyan/hyx/uocr-ms-swift-title-mask/evaluation/pmc-fullce-16k_all129/pred_clean/pmc-fullce-16k",
+   "mix": "/home/jovyan/hyx/uocr-ms-swift-title-mask/evaluation/pmc-readoc-spage-16k_all129/pred_clean/pmc-readoc-spage-16k"
+  },
+  "selection_notes": [
+   "mix extra(max dup)='3-1跨页重复表头' dup=0.6933"
+  ]
+ },
+ "strict_lists": {
+  "base": {
+   "3-2跨页分页切断": {
+    "why": "len2.0x,zlib0.055",
+    "dup": 0.0556,
+    "len_ratio": 2.024,
+    "zlib": 0.0553
+   },
+   "珠海机场_三防工作预案_23": {
+    "why": "len12.3x,zlib0.065",
+    "dup": 0.0,
+    "len_ratio": 12.282,
+    "zlib": 0.0648
+   },
+   "蓝德_办公电脑配置标准_2": {
+    "why": "dup0.30",
+    "dup": 0.3,
+    "len_ratio": 1.869,
+    "zlib": 0.371
+   }
+  },
+  "fc": {
+   "4-3扫描2": {
+    "why": "len2.1x",
+    "dup": 0.0013,
+    "len_ratio": 2.073,
+    "zlib": 0.4021
+   },
+   "蓝德_办公电脑配置标准_2": {
+    "why": "dup0.30",
+    "dup": 0.3,
+    "len_ratio": 1.869,
+    "zlib": 0.371
+   }
+  },
+  "pmc": {
+   "2-1横向合并": {
+    "why": "dup0.33,len4.3x,zlib0.098",
+    "dup": 0.3285,
+    "len_ratio": 4.332,
+    "zlib": 0.098
+   },
+   "3-2跨页分页切断": {
+    "why": "len5.0x,zlib0.025",
+    "dup": 0.0,
+    "len_ratio": 5.0,
+    "zlib": 0.0254
+   },
+   "4-1统计图1": {
+    "why": "len2.5x",
+    "dup": 0.046,
+    "len_ratio": 2.524,
+    "zlib": 0.154
+   },
+   "4-3扫描2": {
+    "why": "dup0.37",
+    "dup": 0.3731,
+    "len_ratio": 1.257,
+    "zlib": 0.2502
+   },
+   "5-1双栏表格2": {
+    "why": "dup0.92,len2.2x",
+    "dup": 0.9224,
+    "len_ratio": 2.182,
+    "zlib": 0.2242
+   },
+   "5-1双栏表格3": {
+    "why": "len4.4x,zlib0.100",
+    "dup": 0.1682,
+    "len_ratio": 4.449,
+    "zlib": 0.0995
+   },
+   "5-2表旁水印": {
+    "why": "dup0.33,len2.5x",
+    "dup": 0.3258,
+    "len_ratio": 2.506,
+    "zlib": 0.17
+   },
+   "中车株洲_方案技术_6": {
+    "why": "len129.8x,zlib0.048",
+    "dup": 0.0,
+    "len_ratio": 129.831,
+    "zlib": 0.0484
+   },
+   "珠海机场_三防工作预案_23": {
+    "why": "len2.6x,zlib0.143",
+    "dup": 0.0,
+    "len_ratio": 2.619,
+    "zlib": 0.1429
+   }
+  },
+  "mix": {
+   "3-1跨页重复表头": {
+    "why": "dup0.69",
+    "dup": 0.6933,
+    "len_ratio": 1.494,
+    "zlib": 0.3282
+   },
+   "3-2跨页分页切断": {
+    "why": "len6.4x,zlib0.069",
+    "dup": 0.0,
+    "len_ratio": 6.358,
+    "zlib": 0.0693
+   },
+   "4-1统计图2": {
+    "why": "len4.0x",
+    "dup": 0.0092,
+    "len_ratio": 4.01,
+    "zlib": 0.3179
+   },
+   "4-3扫描2": {
+    "why": "dup0.52",
+    "dup": 0.523,
+    "len_ratio": 0.994,
+    "zlib": 0.1756
+   },
+   "5-1双栏表格2": {
+    "why": "len2.3x,zlib0.087",
+    "dup": 0.0,
+    "len_ratio": 2.31,
+    "zlib": 0.087
+   },
+   "中车株洲_方案技术_16": {
+    "why": "len43.3x,zlib0.053",
+    "dup": 0.0,
+    "len_ratio": 43.328,
+    "zlib": 0.0527
+   },
+   "广东城规院_惠玩甘青_11": {
+    "why": "len6.3x,zlib0.076",
+    "dup": 0.0,
+    "len_ratio": 6.316,
+    "zlib": 0.0755
+   },
+   "广东特检院_安全报告2_6": {
+    "why": "len22.2x,zlib0.028",
+    "dup": 0.0,
+    "len_ratio": 22.168,
+    "zlib": 0.0283
+   },
+   "珠海机场_工作证管理细则_6": {
+    "why": "dup0.98,len118.0x,zlib0.088",
+    "dup": 0.984,
+    "len_ratio": 118.027,
+    "zlib": 0.0884
+   }
+  }
+ },
+ "cases": [
+  {
+   "case": "珠海机场_工作证管理细则_6",
+   "route": "mix",
+   "flags": "dup0.98,len118.0x,zlib0.088",
+   "len_tok_p": 28502,
+   "len_tok_g": 257,
+   "k_strict": 0,
+   "k_eff": 0,
+   "k_eff_ratio": 0.0,
+   "aligned": false,
+   "align": {
+    "found": false
+   },
+   "ws_norm": {
+    "found": false,
+    "follow_chars": 0
+   },
+   "char_common_prefix": 0,
+   "char_pos": 0,
+   "len_char_p": 52522,
+   "kgt_gt_side": 0,
+   "ctx_before": "\n[注意: k_eff=0,偏离点即输出起点,无偏离前文。以下为输出开头128 tok]\nTEL: 0755-822-8228\nTEL: 0755-822-8228\nTEL: 0755-822-8228\nTEL: 0755-822-8229\nTEL: 0755-822-8229\nTEL: 0755-822-8229\nTEL: 0755-822-8230\nTEL: 0755-822-8230\nTEL: 0755-822-8230\nTEL: 0755-822-8240\nTEL: 0755-822",
+   "ctx_truncated_tail40": false,
+   "head_note": "k_eff=0: 输出从第0个token即偏离GT,展示输出开头代替偏离前文",
+   "gt_expect": "# 二、 总则\n\n为规范管理临时工作人员进入机房办公区域，方便各协作单位在办公区域内有效、有序、顺畅的开展工作。同时落实《资讯科技部计算机中心机房安全安保管理制度》，保证机房办公区域的安全和运行稳定及符合反恐安保的相关要求。制定本细则。\n\n依照本规定细则申请领取临时工作证后，于领取当日起30天有效期内可进入机房办公区域区域。\n\n# 三、",
+   "gt_truncated_head60": false,
+   "loop": {
+    "rest_tokens": 28502,
+    "unit_tokens": 67,
+    "repeats": 123.45,
+    "periodic_suffix_tokens": 8271,
+    "max_period": 4087,
+    "lrs_tokens": 8204,
+    "lrs_unit_repeat_times": 2,
+    "lrs_sample": "公司召开2017年第二次临时股东大会审议通过了《关于使用部分闲置募集资金进行现金管理的议案》。\n1."
+   },
+   "window": {
+    "max_8gram_repeat": 0,
+    "line_dup_rate": 0.5455,
+    "window_tokens": 128
+   },
+   "structure_before": "普通段落",
+   "ctx_end_midline": true,
+   "page_marks_before_k": 0,
+   "dist_last_page_tokens": null,
+   "gt_page_marks": 0,
+   "gt_len_chars": 445
+  },
+  {
+   "case": "4-1统计图2",
+   "route": "mix",
+   "flags": "len4.0x",
+   "len_tok_p": 23260,
+   "len_tok_g": 4798,
+   "k_strict": 0,
+   "k_eff": 0,
+   "k_eff_ratio": 0.0,
+   "aligned": false,
+   "align": {
+    "found": false
+   },
+   "ws_norm": {
+    "found": false,
+    "follow_chars": 0
+   },
+   "char_common_prefix": 0,
+   "char_pos": 0,
+   "len_char_p": 35901,
+   "kgt_gt_side": 0,
+   "ctx_before": "\n[注意: k_eff=0,偏离点即输出起点,无偏离前文。以下为输出开头128 tok]\n_ 2017 年_ 2018 年_ 2019 年_ 2020 年_ 2021 年_ 2022 年_ 2023 年_\n\n 2018 年_ 2019 年_ 2020 年_ 2021 年_ 2022 年_ 2023 年的_\n\n 2018 年_ 2019 年_ 2020 年_ 2021 年_ 2022 年_ 2023\n\n 2018 年_ 2019 年_ 2020",
+   "ctx_truncated_tail40": false,
+   "head_note": "k_eff=0: 输出从第0个token即偏离GT,展示输出开头代替偏离前文",
+   "gt_expect": "# 北京市东城区 2023 年国民经济和社会发展统计公报\n\n2023 年，东城区坚持以习近平新时代中国特色社会主义思想为指导，牢牢把握高质量发展首要任务，坚持稳中求进工作总基调，强化稳增长、稳就业、防风险，精准有力实施宏观政策，全力以赴抓机遇、扬优势、补短板，全年全区经济呈现平稳运行态势，结构持续优化，动能积聚增强，高质量发展迈出坚实步伐。\n\n## 一、人口\n\n年末",
+   "gt_truncated_head60": false,
+   "loop": {
+    "rest_tokens": 23260,
+    "lrs_tokens": 2703,
+    "lrs_unit_repeat_times": 2,
+    "lrs_sample": ". 100. 101. 102. 103. 104. 105. 106. 107"
+   },
+   "window": {
+    "max_8gram_repeat": 0,
+    "line_dup_rate": 0.0,
+    "window_tokens": 128
+   },
+   "structure_before": "普通段落",
+   "ctx_end_midline": true,
+   "page_marks_before_k": 0,
+   "dist_last_page_tokens": null,
+   "gt_page_marks": 0,
+   "gt_len_chars": 8953
+  },
+  {
+   "case": "中车株洲_方案技术_16",
+   "route": "mix",
+   "flags": "len43.3x,zlib0.053",
+   "len_tok_p": 32476,
+   "len_tok_g": 895,
+   "k_strict": 1,
+   "k_eff": 1,
+   "k_eff_ratio": 0.0,
+   "aligned": false,
+   "align": {
+    "found": false
+   },
+   "ws_norm": {
+    "found": false,
+    "follow_chars": 0
+   },
+   "char_common_prefix": 7,
+   "char_pos": 6,
+   "len_char_p": 107108,
+   "kgt_gt_side": 1,
+   "ctx_before": "<table",
+   "ctx_truncated_tail40": false,
+   "head_note": "",
+   "gt_expect": "<table>\n<tr><td rowspan=\"2\" colspan=\"2\">仿真参数</td><td colspan=\"4\">仿真结果</td></tr>\n<tr><td colspan=\"2\">额定：单器件电流454×2=908A</td><td colspan=\"2\">最大：单器件电流610×2=1220A</td></tr>\n<tr><td>直流母线电压</td><td>DC 1500V</td><td>单二极管单元总损耗（W)</td><td>772W</td><td>单二极管单元总损耗",
+   "gt_truncated_head60": false,
+   "loop": {
+    "rest_tokens": 32475,
+    "lrs_tokens": 16,
+    "lrs_unit_repeat_times": 4,
+    "lrs_sample": "</td><td colspan=\"2\">IGBT最大结温(°C) "
+   },
+   "window": {
+    "max_8gram_repeat": 0,
+    "line_dup_rate": 0.0,
+    "window_tokens": 1
+   },
+   "structure_before": "表格(<table>)",
+   "ctx_end_midline": true,
+   "page_marks_before_k": 0,
+   "dist_last_page_tokens": null,
+   "gt_page_marks": 0,
+   "gt_len_chars": 2472
+  },
+  {
+   "case": "3-1跨页重复表头",
+   "route": "mix",
+   "flags": "dup0.69",
+   "len_tok_p": 25939,
+   "len_tok_g": 11829,
+   "k_strict": 0,
+   "k_eff": 0,
+   "k_eff_ratio": 0.0,
+   "aligned": false,
+   "align": {
+    "found": false
+   },
+   "ws_norm": {
+    "found": false,
+    "follow_chars": 0
+   },
+   "char_common_prefix": 0,
+   "char_pos": 0,
+   "len_char_p": 40276,
+   "kgt_gt_side": 0,
+   "ctx_before": "\n[注意: k_eff=0,偏离点即输出起点,无偏离前文。以下为输出开头128 tok]\nCBS 35.240\n\nCCS L 70\n\n# 中华人民共和国国家标准\n\nGB/T XXXXX—XXXX\n\n# 数据基础设施 数据目录描述要求\n\nData infrastructure—Data catalog description requirements\n\n(点击此处添加与国际标准一致性程度的标识)\n\n(征求意见稿)\n\n在提交反馈意见时，请将您知道的相关专利连同支持性文件一并附上。\n\n# 数据基础设施 数据目录描述要求\n\nData infrastructure—Data catalog description requirements\n\n(点击此处添加与国际标准一致性程度的标识)\n\n(征求意见稿)\n\n在提交反馈意见时，请将您知道的相关专利连同支持性文件一并附上。\n",
+   "ctx_truncated_tail40": false,
+   "head_note": "k_eff=0: 输出从第0个token即偏离GT,展示输出开头代替偏离前文",
+   "gt_expect": "# 中华人民共和国国家标准 \n\nGB/T XXXXX—XXXX\n\n# 数据基础设施 数据目录描述要求\n\n# Data infrastructure—Data catalog description requirements\n\n(点击此处添加与国际标准一致性程度的标识)\n\n(征求意见稿)\n\n在提交反馈意见时，请将您知道的相关专利连同支持性文件一并附上。\n\nXXXX - XX - XX 发布\n\nXXXX - XX - XX 实施\n\n国家市场监督管理总局\n国家标准化管理委员会 发布\n\n## 目次",
+   "gt_truncated_head60": false,
+   "loop": {
+    "rest_tokens": 25939,
+    "lrs_tokens": 69,
+    "lrs_unit_repeat_times": 2,
+    "lrs_sample": "# 数据基础设施 数据目录描述要求\n\nData infrastructure—Data catalog description requirements\n\n(点击此处添加与国际标准"
+   },
+   "window": {
+    "max_8gram_repeat": 0,
+    "line_dup_rate": 0.3571,
+    "window_tokens": 128
+   },
+   "structure_before": "普通段落",
+   "ctx_end_midline": false,
+   "page_marks_before_k": 0,
+   "dist_last_page_tokens": null,
+   "gt_page_marks": 0,
+   "gt_len_chars": 26955
+  },
+  {
+   "case": "2-1横向合并",
+   "route": "pmc",
+   "flags": "dup0.33,len4.3x,zlib0.098",
+   "len_tok_p": 30016,
+   "len_tok_g": 5675,
+   "k_strict": 0,
+   "k_eff": 86,
+   "k_eff_ratio": 0.0029,
+   "aligned": true,
+   "align": {
+    "found": true,
+    "needle_chars": 80,
+    "align_char": 38,
+    "align_token": 22,
+    "skip_pred": 0,
+    "skip_gt": 7,
+    "matched_after_align": 64
+   },
+   "ws_norm": {
+    "found": true,
+    "align_char": 36,
+    "follow_chars": 237,
+    "note": "自GT第10字符起的空白归一内容跟随长度"
+   },
+   "char_common_prefix": 0,
+   "char_pos": 133,
+   "len_char_p": 57039,
+   "kgt_gt_side": 71,
+   "ctx_before": "<PAGE>宁波市天普橡胶科技股份有限公司\n招股说明书\n的准则自 2017 年 6 月 12 日起施行，对于 2017 年 1 月 1 日存在的政府补助，要求采用未来适用法处理；对于 2017 年 1 月 1 日至施行日新增的政府补助，也要求按照修订后的准则进行调整",
+   "ctx_truncated_tail40": false,
+   "head_note": "",
+   "gt_expect": "适用法处理；对于 2017 年 1 月 1 日至施行日新增的政府补助，也要求按照修订后的准则进行调整。\n\n财政部于 2017 年度发布了《财政部关于修订印发一般企业财务报表格式的通知》，对一般企业财务报表格式进行了修订，适用于 2017 年度及以后期间的财务报表。\n\n本公司执行上述规定的主要影响如下：\n\n\n\n<table><tr><td>会计政策变更的内容和原因</td><td>受影响的报表项目名称和金额</td></tr><tr><td>（1）与本公司日常活动相关的政府补助，计入其他收益，不再计入营业外收入。比较数据不调整",
+   "gt_truncated_head60": false,
+   "loop": {
+    "rest_tokens": 29930,
+    "lrs_tokens": 5537,
+    "lrs_unit_repeat_times": 2,
+    "lrs_sample": "、分部信息\n\n### 210、分部信息\n\n### 211、分部信息\n\n### 212、分部信息"
+   },
+   "window": {
+    "max_8gram_repeat": 2,
+    "line_dup_rate": 0.0,
+    "window_tokens": 86
+   },
+   "structure_before": "普通段落",
+   "ctx_end_midline": true,
+   "page_marks_before_k": 1,
+   "dist_last_page_tokens": 86,
+   "gt_page_marks": 0,
+   "gt_len_chars": 13166
+  },
+  {
+   "case": "中车株洲_方案技术_6",
+   "route": "pmc",
+   "flags": "len129.8x,zlib0.048",
+   "len_tok_p": 32396,
+   "len_tok_g": 250,
+   "k_strict": 0,
+   "k_eff": 0,
+   "k_eff_ratio": 0.0,
+   "aligned": false,
+   "align": {
+    "found": false
+   },
+   "ws_norm": {
+    "found": false,
+    "follow_chars": 0
+   },
+   "char_common_prefix": 0,
+   "char_pos": 0,
+   "len_char_p": 64656,
+   "kgt_gt_side": 0,
+   "ctx_before": "\n[注意: k_eff=0,偏离点即输出起点,无偏离前文。以下为输出开头128 tok]\n四方氢能源城际(GSYE51)牵引变压器(永磁+SiC)\n\n图 2 牵引变流器主电路图\n4.2 内部接口规划\n牵引变流器内部器件多采用模块化设计，包括 SIC 逆变模块、续流二极管模块、BUCK+CHOP 模块、三电平辅变模块及充电机模块等。其中主电路采用母排和电缆连接；TCU 传动控制单元、SIC 逆变模块、BUCK+CHOP 模块、三电平辅变模块及充电机的控制连线采用连接器进行连接",
+   "ctx_truncated_tail40": false,
+   "head_note": "k_eff=0: 输出从第0个token即偏离GT,展示输出开头代替偏离前文",
+   "gt_expect": "![](images/aipaas.jpg)  \n\n图 2 牵引变流器主电路图\n\n# 4.2 内部接口规划\n\n牵引变流器内部器件多采用模块化设计，包括 SIC 逆变模块、续流二极管模块、BUCK+CHOP 模块、三电平辅变模块及充电机模块等。其中主电路采用母排和电缆连接；TCU 传动控制单元、SIC 逆变模块、",
+   "gt_truncated_head60": false,
+   "loop": {
+    "rest_tokens": 32396,
+    "unit_tokens": 1800,
+    "repeats": 17.73,
+    "periodic_suffix_tokens": 31922,
+    "max_period": 14400,
+    "lrs_tokens": 27726,
+    "lrs_unit_repeat_times": 3,
+    "lrs_sample": " 100 101 102 103 104 105 106 107 108 109 110 111"
+   },
+   "window": {
+    "max_8gram_repeat": 0,
+    "line_dup_rate": 0.0,
+    "window_tokens": 128
+   },
+   "structure_before": "普通段落",
+   "ctx_end_midline": true,
+   "page_marks_before_k": 0,
+   "dist_last_page_tokens": null,
+   "gt_page_marks": 0,
+   "gt_len_chars": 498
+  }
+ ],
+ "base_cross_check": {
+  "base_perdoc_pred_count": 129,
+  "common_strict_pmc_and_mix": [
+   "3-2跨页分页切断",
+   "4-3扫描2",
+   "5-1双栏表格2"
+  ],
+  "base_flags": {
+   "2-1横向合并": "OK",
+   "3-1跨页重复表头": "OK",
+   "3-2跨页分页切断": "len2.0x,zlib0.055",
+   "4-1统计图2": "OK",
+   "4-3扫描2": "OK",
+   "5-1双栏表格2": "OK",
+   "中车株洲_方案技术_16": "OK",
+   "中车株洲_方案技术_6": "OK",
+   "珠海机场_工作证管理细则_6": "OK"
+  },
+  "base_strict_list": [
+   "3-2跨页分页切断",
+   "珠海机场_三防工作预案_23",
+   "蓝德_办公电脑配置标准_2"
+  ]
+ },
+ "base_cases": [
+  {
+   "case": "3-2跨页分页切断",
+   "route": "base",
+   "flags": "len2.0x,zlib0.055",
+   "len_tok_p": 12189,
+   "len_tok_g": 5943,
+   "k_strict": 0,
+   "k_eff": 0,
+   "k_eff_ratio": 0.0,
+   "aligned": false,
+   "align": {
+    "found": false
+   },
+   "ws_norm": {
+    "found": false,
+    "follow_chars": 0
+   },
+   "char_common_prefix": 0,
+   "char_pos": 0,
+   "len_char_p": 20287,
+   "kgt_gt_side": 0,
+   "ctx_before": "\n[注意: k_eff=0,偏离点即输出起点,无偏离前文。以下为输出开头128 tok]\n<PAGE>【样本说明】检查项：3. 跨页表 / 跨页 /\n某行被分页切断。表头含义：首列「业务分项」为行名（记哪一类业务）；其后四列为「第一～第四季度」，表示2024\n年各季度营业收入，单位万元（即常见报表中的 01～04\n分列）。中间插入通栏「管理层讨论」长文本行，使该行高度超过单页，分页时表现为同一行被上下切断。\n表 1 2024 年度分季度营业收入及说明（单位：万元",
+   "ctx_truncated_tail40": false,
+   "head_note": "k_eff=0: 输出从第0个token即偏离GT,展示输出开头代替偏离前文",
+   "gt_expect": "【样本说明】检查项：3. 跨页表 / 跨页 /\n\n某行被分页切断。表头含义：首列「业务分项」为行名（记哪一类业务）；其后四列为「第一～第四季度」，表示2024年各季度营业收入，单位万元（即常见报表中的Q1-Q4\n\n分列）。中间插入通栏「管理层讨论」长文本行，使该行高度超过单页",
+   "gt_truncated_head60": false,
+   "loop": {
+    "rest_tokens": 12189,
+    "lrs_tokens": 55,
+    "lrs_unit_repeat_times": 2,
+    "lrs_sample": "段为测试用连续说明文字,用于制造“单行跨页切新”版面。(61)管理层讨论"
+   },
+   "window": {
+    "max_8gram_repeat": 0,
+    "line_dup_rate": 0.0,
+    "window_tokens": 128
+   },
+   "structure_before": "普通段落",
+   "ctx_end_midline": true,
+   "page_marks_before_k": 0,
+   "dist_last_page_tokens": null,
+   "gt_page_marks": 0,
+   "gt_len_chars": 10024
+  }
+ ]
+}

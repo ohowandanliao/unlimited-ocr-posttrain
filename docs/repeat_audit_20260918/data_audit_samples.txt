@@ -1,0 +1,100 @@
+================================================================================
+_which: pmc-fullce-16k median-pages merge
+id: pmc_pmc10000488
+pages: 10
+prompt: <image>Multi page merge.
+target_tokens_measured: 11256
+target_tokens_meta: 11256
+target_chars: 44790
+target_first_500: Review
+
+# The Secondary Myelodysplastic Neoplasms (MDS) Jigsaw
+
+Calvete Oriol 1 *
+
+https://orcid.org/0000-0002-4809-3897 Mestre Julia 1
+
+Jerez Andrés 2
+
+https://orcid.org/0000-0002-3251-2161 Solé Francesc 1
+
+Montuenga Luis Academic Editor
+
+Castro Elena Academic Editor
+
+Maraver Antonio Academic Editor
+
+1 MDS Group, Institut de Recerca Contra la Leucèmia Josep Carreras, 08916 Barcelona, Spain
+
+2 Experimental Hematology Unit, Department of Hematology, Vall d’Hebron Institute of Oncology (VHIO), Uni
+target_mid_500: ic predisposition must be considered beyond bone marrow syndromes [12]. Likewise, CHIP may be initiated, expanded or triggered by cytotoxic therapy [67]; however, both CHIP and treatment for the primary tumor could also coexist with no association. In addition, different mutational burdens and their correlation with CHIP-related mutations are different for different hematological malignancies [68]. Thus, different MDS subtypes may be expected in different combinations of cytotoxic effects togeth
+target_last_500:  complex karyotypes</bold> </td><td>Not described</td><td>Not described</td><td>del(5q), −7/del(7q), −18/−18q (7%), +8, −20q.<br/>Other: +1/+1q, −5, +11, −13/13q−, −17/17p−, −21, +mar [27]</td><td>−5/del(5q), −7/del(7q)<br/>Other: der(21q), +8, der(12q), t(1;7), −12, der(17q), der(3q), der(3q), and −18 [22]</td></tr></tbody></table>
+
+* Three or more cytogenetic alterations. MDS: myelodysplastic neoplasm; CHIP: clonal hematopoiesis of indeterminate potential; MDS-pCT: MDS post-cytotoxic therapy.
+
+last_12_token_ids: [10525, 3095, 5272, 28, 373, 10525, 2411, 15, 70318, 57928, 8444, 603]
+roundtrip_decode200_eq: True
+
+================================================================================
+_which: pmc-fullce-16k longest-target
+id: pmc_pmc10538276
+pages: 10
+prompt: <image>Multi page merge.
+target_tokens_measured: 13487
+target_tokens_meta: 13487
+target_chars: 49148
+target_first_500: VirologyEpidemiologyImmunologyInfectious DiseasesCOVID-19
+
+# Seroprevalence of SARS-CoV-2 anti-spike IgG antibody among COVID-19 vaccinated individuals residing in Surabaya, East Java, Indonesia
+
+http://orcid.org/0000-0002-4452-5250 Megasari Ni Luh Ayu 1 2
+
+Yamani Laura Navika 2 3
+
+Juniastuti Juniastuti 2 4
+
+Lusida Maria Inge 2 4
+
+Mori Yasuko 5 ymori@med.kobe-u.ac.jp
+
+1 Postgraduate School, Universitas Airlangga, Surabaya, East Java, Indonesia
+
+2 Indonesia-Japan Collaborative Research Center for
+target_mid_500: investigations on Indonesian healthcare workers receiving two-dose CoronaVac and one dose of Moderna booster also showed 100% anti-SARS-CoV-2 antibodies positivity (Cucunawangsih et al., 2022; Hidayat et al., 2022; Sinto et al., 2023).
+
+Time after the last dose of vaccination significantly affected the anti-S-IgG antibody positivity, especially of CoronaVac recipients. A total of 3 months after vaccination, anti-S-IgG seronegativity turned to be around 20–38.5%, compared to 3.4% and 7.8% in the 
+target_last_500: rris G Mallick B Eeles P Hay J VanSteenhouse H Lee J Antibody responses to SARS-CoV-2 vaccines in 45,965 adults from the general population of the United Kingdom Nature Microbiology 2021 6 9 1140 1149
+
+Wisnewski, Campillo Luna & Redlich (2021) Wisnewski AV Campillo Luna J Redlich CA Human IgG and IgA responses to COVID-19 mRNA vaccines PLOS ONE 2021 16 6 e0249499
+
+World Health Organization (2022) World Health Organization Coronavirus disease (COVID-19): vaccines 2022 (accessed 16 December 2022)
+
+last_12_token_ids: [223, 939, 20, 343, 54396, 223, 926, 5899, 223, 939, 20, 682]
+roundtrip_decode200_eq: True
+
+================================================================================
+_which: readoc-view-16k median-pages merge
+id: readoc_arxiv_1805.05913
+pages: 6
+prompt: <image>Multi page merge.
+target_tokens_measured: 5444
+target_tokens_meta: None
+target_chars: 25243
+target_first_500: # Pre-Hospital Management of Acute Myocardial Infarction Using Tele-Electrocardiography System
+
+Masoud Elhami Asl1,*, Masoomeh Rahimpour1, Mahmoud Reza Merati1,
+Amir Hossein Panahi1,2, and Kamran Gholami1
+
+1 Pooyandegan Rah Saadat Co., Tehran, Iran.
+2 IRAN Telecom Research Center, Tehran, Iran.
+
+###### Abstract
+
+_Abstract_— A comprehensive survey revealed that many patients of Acute Myocardial Infarction reach to the hospital so late to deliver an effective treatment. This leads to poor treatmen
+target_mid_500: he type of QRS complex is done according to the initial estimation of peak points on each complex known as \(PK_{i}\); these points are the candidates of Q, R, S and R’ waves according to their amplitude and upward or downward slopes. After type declaration of QRS complex, the onset and offset points of QRS wave have been determined within the windows locating according to the R wave location. In order to detect P and T wave boundaries, the information of slope signal has been used. Using moving
+target_last_500: etation system for primary care physicians in a community hospital,” _The Journal of the American Board of Family Practice_, vol. 2, no. 1, pp. 17–24, 1989.
+* [16] H. M. Krumholz, E. H. Bradley, B. K. Nallamothu, H. H. Ting, W. B. Batchelor, E. Kline-Rogers, A. F. Stern, J. R. Byrd, and J. E. Brush, “A campaign to improve the timeliness of primary percutaneous coronary intervention: Door-to-balloon: An alliance for quality,” _JACC: Cardiovascular Interventions_, vol. 1, no. 1, pp. 97–104, 2008.
+
+last_12_token_ids: [14, 5727, 16, 223, 5106, 1127, 7163, 14, 223, 792, 26, 603]
+roundtrip_decode200_eq: True
+
