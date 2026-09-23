@@ -1,16 +1,18 @@
 # Unlimited-OCR ms-swift post-training bundle
 
 这是 ms-swift 的 external plugin 与训练工具，不是独立训练框架。脚本分类见
-[`scripts/README.md`](scripts/README.md)；已训练方案与结果见
-[`../docs/training_scheme_registry_2026-08-29.md`](../docs/training_scheme_registry_2026-08-29.md)，
-回退归因见 [`../docs/analysis_all_regress_attribution_2026-09-02.md`](../docs/analysis_all_regress_attribution_2026-09-02.md)。
+[`scripts/README.md`](scripts/README.md)；当前实验结论见
+[`../docs/reports/analysis_experiments_20260922.md`](../docs/reports/analysis_experiments_20260922.md)，
+完整实验数据见
+[`../docs/reports/experiments_dump_20260922.md`](../docs/reports/experiments_dump_20260922.md)。
 旧 2026-08-23 快照复现需要 `UOCR_ALLOW_LEGACY_20260823=1`，不再是默认方案。
 
 ## 训练约定
 
 - `TRAINING_RECIPE`、`LOSS_MODE`、`MODEL_PATH`、`TRAIN_JSONL`、`VAL_JSONL`、`OUTPUT_DIR` 均为必填；
-  合法取值为 `readoc_r0`、`replay_r1`、`pmc_s10`、`trusted_title`、`readoc_view_ablation` 和
-  `legacy_20260823`。`readoc_view_ablation` 只允许 `full_ce` 或 `title_weighted`；已训练方案的数据校验
+  合法取值为 `readoc_r0`、`replay_r1`、`pmc_s10`、`pmc_fullce`、`pmc_readoc_mix`、
+  `trusted_title`、`readoc_view_ablation` 和 `legacy_20260823`。`readoc_view_ablation` 只允许
+  `full_ce` 或 `title_weighted`；已训练方案的数据校验
   记录（recipe audit JSON）在运行目录 `data/recipes/`。
 - `title_mask` loss 只允许历史复现。新标题消融先证明 `uniform_ce` 与 native `full_ce` 在同一
   gradient-accumulation batch 上 loss/gradient 一致，再比较 `title_weighted`。新 custom CE 使用

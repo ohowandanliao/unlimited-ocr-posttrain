@@ -423,9 +423,9 @@ text/order 项,如同篇 text_acc 0.028)。**任何跨路线 TEDS 对比必须�
 - 评测产物:`evaluation/{readoc-view-16k,pmc-fullce-16k,pmc-readoc-spage-16k}_all129/`
   (responses / pred / pred_clean / pred_titles / omnidocbench_sweep_combined / agentbuilder;
   逐篇分数在 agentbuilder/*/per_doc_scores.json)
-- 复核与排查:`posttrain docs/two_rounds_review_2026-09-18.md`、`repeat_audit_2026-09-18.md`
-  (+ 产物 review_20260918/、repeat_audit_20260918/;本地镜像于同步点 evaluation/)
-- 归因定稿:`posttrain docs/pmc_fullce_attribution_2026-09-17.md`(第一轮逐篇 case 解剖)
+- 复核与排查：[`../audits/two_rounds_review_2026-09-18.md`](../audits/two_rounds_review_2026-09-18.md)、
+  [`../audits/repeat_audit_2026-09-18.md`](../audits/repeat_audit_2026-09-18.md)（结构化产物与复算脚本在同目录子目录）。
+- 归因定稿：[`../audits/pmc_fullce_attribution_2026-09-17.md`](../audits/pmc_fullce_attribution_2026-09-17.md)（第一轮逐篇 case 解剖）。
 - 训练:`output/<run>/v0-*/checkpoint-*/trainer_state.json`;训练数据
   `~/hyx/dataset/pmc-fullce-data/`、`~/hyx/uocr-ms-swift-title-mask/data/readoc-view-16k/`
 - 数据规则:`RULES_LEDGER_2026-09-16.md` 等(远端数据目录与本地同步点双份)

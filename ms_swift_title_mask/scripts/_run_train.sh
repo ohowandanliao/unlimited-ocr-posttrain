@@ -28,7 +28,7 @@ export PYTHONPATH="$UOCR_SHIMS_ROOT:$MS_SWIFT_ROOT:$POSTTRAIN_ROOT${PYTHONPATH:+
 : "${TRAIN_JSONL:?set TRAIN_JSONL to reviewed train.jsonl}"
 : "${VAL_JSONL:?set VAL_JSONL to reviewed validation.jsonl}"
 : "${OUTPUT_DIR:?set OUTPUT_DIR to a new experiment directory below MODEL_OUTPUT_ROOT}"
-: "${TRAINING_RECIPE:?set TRAINING_RECIPE to readoc_r0, replay_r1, pmc_s10, trusted_title, readoc_view_ablation, or legacy_20260823}"
+: "${TRAINING_RECIPE:?set TRAINING_RECIPE to readoc_r0, replay_r1, pmc_s10, pmc_fullce, pmc_readoc_mix, trusted_title, readoc_view_ablation, or legacy_20260823}"
 : "${LOSS_MODE:?set LOSS_MODE explicitly to full_ce, uniform_ce, title_weighted, or title_mask}"
 if ! command -v realpath >/dev/null 2>&1; then
   echo "realpath is required to validate OUTPUT_DIR safely" >&2
@@ -96,7 +96,7 @@ case "$WORLD_SIZE" in
 esac
 
 case "$TRAINING_RECIPE" in
-  readoc_r0|replay_r1|pmc_s10|trusted_title|readoc_view_ablation|legacy_20260823) ;;
+  readoc_r0|replay_r1|pmc_s10|pmc_fullce|pmc_readoc_mix|trusted_title|readoc_view_ablation|legacy_20260823) ;;
   *) echo "invalid TRAINING_RECIPE: $TRAINING_RECIPE" >&2; exit 2 ;;
 esac
 
@@ -105,7 +105,7 @@ case "$LOSS_MODE" in
   *) echo "LOSS_MODE must be full_ce, uniform_ce, title_weighted, or title_mask" >&2; exit 2 ;;
 esac
 case "$TRAINING_RECIPE" in
-  readoc_r0|replay_r1|pmc_s10)
+  readoc_r0|replay_r1|pmc_s10|pmc_fullce|pmc_readoc_mix)
     if [[ "$LOSS_MODE" != "full_ce" ]]; then
       echo "$TRAINING_RECIPE only permits LOSS_MODE=full_ce" >&2
       exit 2

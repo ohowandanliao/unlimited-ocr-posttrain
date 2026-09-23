@@ -2,7 +2,7 @@
 
 > 2026-09-20。**合并自 `PMC_EVAL_GUIDE_2026-09-17.md` + `evaluation_pitfalls_2026-09-17.md`**(两份已删),并纳入 09-18 pmc-readoc-spage-16k 评测轮的实践(一键脚本、AGGRESSIVE 白名单、straggler 容错、口径洞)。
 > 定位:**拿到新 checkpoint 后,从权重到 Overall 修正分的完整操作手册 + 全部坑**。新会话/新人跑评测前必读。
-> 远端权威副本:posttrain `docs/EVAL_GUIDE_2026-09-20.md`。
+> 仓库权威副本：`docs/guides/EVAL_GUIDE_2026-09-20.md`。
 
 ## 0. 链路总览(20 秒版)
 
@@ -108,8 +108,8 @@ cd $OMNI && $VENV run_md2md.py --gt_dir <tmp_gt> --pred_dir <tmp_pred> \
 ### P4 聚合 + 合成 official 件
 
 ```bash
-cd $S && python3 aggregate_sweep.py "swpN_*"      # ⚠️ 前缀必须带通配符(坑10)
-python3 synthesize_combined_metric.py "swpN_" $EVAL/omnidocbench_sweep_combined <run>
+cd $S && python3 aggregate_sweep.py --result-dir "$OMNI/result" "swpN_*" # 前缀必须带通配符(坑10)
+python3 synthesize_combined_metric.py --result-dir "$OMNI/result" "swpN_" $EVAL/omnidocbench_sweep_combined <run>
 ```
 
 - **公式**(`task/end2end_run_eval.py::_calculate_total_score`):`Total = ((1−TextEdit)×100 + TEDS×100 + (1−FormulaEdit)×100)/3`;TextEdit/FormulaEdit = 全局所有页平均(doc 各贡献 1 个篇内均值),**TEDS = 全局所有表平均(pooled)**。
@@ -192,4 +192,4 @@ cd $UOCR/evaluation/tooling/agentbuilder_pkg && "$VENV" -m agentbuilder_eval.run
 | `synthesize_combined_metric.py` | ✅ | `$S/` + 各轮 `$EVAL/sweep/` |
 | `resweep_pred_clean.sh` | — | 各轮 `$EVAL/sweep/`(改前缀复用) |
 | `probe_evaluation_pdfs_parallel.py` | — | `$S/`(prompt 路由在 :114-117) |
-| 评分口径细解 + 两轮复核 | `TWO_ROUNDS_REVIEW_2026-09-18.md`、`review_20260918/verify{1-4}.py` | posttrain `docs/two_rounds_review_2026-09-18.md` |
+| 评分口径细解 + 两轮复核 | [`../audits/two_rounds_review_2026-09-18.md`](../audits/two_rounds_review_2026-09-18.md) | 复算脚本见 `../audits/two_rounds_20260918/` |

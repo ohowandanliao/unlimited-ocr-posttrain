@@ -5,33 +5,31 @@ PDF、页图、训练 JSONL、模型、adapter 与日志必须留在仓库外。
 
 ## 当前状态
 
-截至 2026-09-02：已登记 9 套训练方案并完成 129-PDF 统一协议评测。**6 套已完整评测方案全部相对
-主 Base（OmniDocBench `53.3645` / AI Builder Overall `0.8271`）回退（-1.70 ~ -43.48 pp），9 套
-Train Fit 均为 `partial_learning`，不进入部署。** case 级归因已完成：带标题段（prior）模型的回退由
-推理时标题段触发输出协议翻转造成，先验训练与先验质量均无责；详见
-[`docs/analysis_all_regress_attribution_2026-09-02.md`](docs/analysis_all_regress_attribution_2026-09-02.md)。
+截至 2026-09-22，六条路线已按统一汇总口径完成对照。训练路线中表现最好的 `cont1623`
+修正 Overall 为 `0.7205`，仍低于未训练 Base 的 `0.7554`。同为 1623 步时，混合路线
+`mix1623` 的多页表格 TEDS / `<table>` 发射数为 `0.3908 / 53`，PMC 续训路线为
+`0.5089 / 147`；现有证据指向混合配方整体，但还不能单独归因给 READoc 或单页数据。
 
-历史：旧 `READoc + PMC full + PMC single` natural union（train target 按字符计 82.32% 来自 PMC）
-已于 2026-08-26 停用（当时的诊断文档已于 2026-09-03 清理）。
-
-下一轮方向以 [`docs/posttrain_weekly_report_2026-08-30.md`](docs/posttrain_weekly_report_2026-08-30.md) §5 为准
-（先统一输出协议与复读归因，再决定 loss/数据变量）；训练入口与脚本分类见
-[`ms_swift_title_mask/scripts/README.md`](ms_swift_title_mask/scripts/README.md)。交接总览见
-[`docs/HANDOFF_2026-09-01.md`](docs/HANDOFF_2026-09-01.md)。
+当前决策、证据等级和下一轮四臂消融设计见
+[`docs/reports/analysis_experiments_20260922.md`](docs/reports/analysis_experiments_20260922.md)。
+完整逐篇数据见
+[`docs/reports/experiments_dump_20260922.md`](docs/reports/experiments_dump_20260922.md)，文档总入口见
+[`docs/README.md`](docs/README.md)。
 
 ## 当前入口
 
 | 路径 | 用途 |
 |---|---|
-| [`docs/README.md`](docs/README.md) | 当前文档、历史文档与事实源索引 |
+| [`docs/README.md`](docs/README.md) | 当前结论、操作指南、审计证据与历史归档索引 |
 | [`scripts/data/audit_raw_sources.py`](scripts/data/audit_raw_sources.py) | 只读审计 READoc ZIP 和 PMC PDF/`middle.json` |
 | [`ms_swift_title_mask/scripts/validate_training_recipe.py`](ms_swift_title_mask/scripts/validate_training_recipe.py) | 启动前检查语言、来源、重复、正文状态和污染模式 |
 | [`ms_swift_title_mask/scripts/probe_evaluation_pdfs_parallel.py`](ms_swift_title_mask/scripts/probe_evaluation_pdfs_parallel.py) | 当前正式评测 runner（129-PDF 统一协议；断点续跑、逐文件 prompt manifest） |
-| [`ms_swift_title_mask/scripts/probe_train_fit.py`](ms_swift_title_mask/scripts/probe_train_fit.py) | 训练数据 overfit 抽测（Train Fit），配套 `docs/posttrain_completion_sop_2026-08-28.md` |
+| [`ms_swift_title_mask/scripts/probe_train_fit.py`](ms_swift_title_mask/scripts/probe_train_fit.py) | 训练数据 overfit 抽测（Train Fit），配套 `docs/guides/posttrain_completion_sop_2026-08-28.md` |
+| [`ms_swift_title_mask/scripts/strip_grounding_shell.py`](ms_swift_title_mask/scripts/strip_grounding_shell.py) | 将 grounding 协议输出转换为评分用 Markdown，并执行残留检查 |
 | [`scripts/evaluation/analyze_outputs.py`](scripts/evaluation/analyze_outputs.py) | 对已保存输出做快速退化分析 |
 
-训练统一走 `ms_swift_title_mask/scripts/run_single_h100.sh` 或 `run_dual_h100.sh`。调用者必须显式设置
-`TRAINING_RECIPE`、`LOSS_MODE`、模型、数据和新输出目录；脚本不再默认指向某个历史 run。
+通用训练走 `ms_swift_title_mask/scripts/run_single_h100.sh` 或 `run_dual_h100.sh`；PMC Full-CE
+复现实验可使用 `run_pmc_fullce.sh`。调用者必须显式确认 recipe、loss、模型、数据和新输出目录。
 
 ## Prerequisites 与训练起步
 
@@ -64,8 +62,8 @@ source ms_swift_title_mask/scripts/hyx_env.sh
 训练 JSONL 必须符合 [`train_row.example.jsonl`](ms_swift_title_mask/examples/train_row.example.jsonl)
 的 schema 并通过启动前 validator；历史数据与评测 manifest 不随本仓库分发。
 
-合法 `TRAINING_RECIPE` 为 `readoc_r0`、`replay_r1`、`pmc_s10`、`trusted_title`、
-`readoc_view_ablation` 和 `legacy_20260823`；后者只用于历史复现。对于
+合法 `TRAINING_RECIPE` 为 `readoc_r0`、`replay_r1`、`pmc_s10`、`pmc_fullce`、
+`pmc_readoc_mix`、`trusted_title`、`readoc_view_ablation` 和 `legacy_20260823`；后者只用于历史复现。对于
 `prepare_readoc_view_jsonl.py` 生成的数据，READoc view 消融可直接运行：
 
 ```bash

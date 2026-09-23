@@ -36,7 +36,7 @@
 | 优化器/调度 | — | lr 2e-5、cosine、warmup 3%、wd 0.01、adam β2 0.95、clip 1.0、1 epoch、bs 1 × grad_accum 8(全局 8)、bf16、sdpa | `_run_train.sh:117-124,222-236` |
 | 训练 max_length | — | 16384(16k)/32768(32k);`--truncation_strategy None`(依赖构建期硬过滤) | `run_pmc_fullce.sh:27-31`;`_run_train.sh:218-219` |
 | **解码:防重复** | **官方默认 `no_repeat_ngram_size=0, ngram_window=0`(无任何防重)**、greedy(temperature=0) | 加了 `SlidingWindowNoRepeatNgramProcessor(35, window 单页128/多页1024)`,其余同官方 greedy | 官方:`modeling_unlimitedocr.py:811,1163`(签名默认 0);本项目:`serve_unlimited_ocr.py:45-48`、`probe_evaluation_pdfs_parallel.py:352-367`、responses.jsonl gen 实录 |
-| 解码 max_length | 32768 | **两轮新模型 32768;0827 基线 20480**(跨轮不一致) | 两轮:responses.jsonl `gen.max_length=32768`;0827:`docs/evaluation_readoc_view_16k_2026-08-27.md:114-115` |
+| 解码 max_length | 32768 | **两轮新模型 32768;0827 基线 20480**(跨轮不一致) | 两轮:responses.jsonl `gen.max_length=32768`;0827:[`../reports/evaluation_readoc_view_16k_2026-08-27.md`](../reports/evaluation_readoc_view_16k_2026-08-27.md) |
 | 视觉输入 | infer_multi 默认 image_size=640(111 token/页) | image_size=1024、crop 关(273 token/页)——**与训练一致**(训练 env `CROP_MODE=false, IMAGE_SIZE=1024`) | 官方默认:`modeling_unlimitedocr.py:1163`;本项目:`serve_unlimited_ocr.py:182-193`、`_run_train.sh:193-195` |
 | swift 仓库改动 | 上游 `1a1ba3ee8` | 仅 `swift/trainers/mixin.py` 6 行(compute_loss_func 兼容旧 transformers 构造签名);full_ce 路径无 loss_type,不触发 | `git diff HEAD`(ms-swift-uocr) |
 
@@ -179,7 +179,7 @@ spage 2000 行全部是单页样本(1 页/行),不属 merge。
 
 ## 7. 复读 case 首偏离解剖(6 case + base 交叉)
 
-口径:严格退化名单与路径**逐字复用** `docs/review_20260918/verify1.py` 的四规则实现(dup≥0.3 / len≥2×GT / 塌缩≤1/3 / zlib<0.15)。k_strict = pred 与 GT 的 token 公共前缀;k_eff = 先对齐 GT 开头、再算 pred 跟随 GT 的 token 数;**k_eff=0 = 输出从第 0 个 token 就没跟 GT**。报告全文:`evaluation/audit_repeat_20260918/case_forensics.md`(+json)。
+口径:严格退化名单与路径**逐字复用** [`two_rounds_20260918/verify1.py`](two_rounds_20260918/verify1.py) 的四规则实现(dup≥0.3 / len≥2×GT / 塌缩≤1/3 / zlib<0.15)。k_strict = pred 与 GT 的 token 公共前缀;k_eff = 先对齐 GT 开头、再算 pred 跟随 GT 的 token 数;**k_eff=0 = 输出从第 0 个 token 就没跟 GT**。报告全文：[`repeat_20260918/case_forensics.md`](repeat_20260918/case_forensics.md)（另有 JSON）。
 
 ### 7.1 严格退化名单(复算,与既有记录一致)
 
@@ -355,8 +355,7 @@ Data infrastructure—Data catalog description requirements
 
 | 文件 | 内容 |
 |---|---|
-| `evaluation/audit_repeat_20260918/data_audit_report.json` | 三套训练集全量 token 化统计(行数/页数/长度/截断/EOS/page/GT n-gram/对账) |
-| `evaluation/audit_repeat_20260918/data_audit_samples.txt` | 3 个典型 merge 样本的 prompt/页数/头中尾原文/末 12 token id |
-| `evaluation/audit_repeat_20260918/uocr_audit.py` | 审计脚本(远端 venv python CPU 运行) |
-| `evaluation/audit_repeat_20260918/case_forensics.{md,json}` | 复读 case 首偏离取证(§7) |
-| 远端镜像 | posttrain `docs/repeat_audit_2026-09-18.md`(+脚本) |
+| [`repeat_20260918/data_audit_report.json`](repeat_20260918/data_audit_report.json) | 三套训练集全量 token 化统计(行数/页数/长度/截断/EOS/page/GT n-gram/对账) |
+| [`repeat_20260918/data_audit_samples.txt`](repeat_20260918/data_audit_samples.txt) | 3 个典型 merge 样本的 prompt/页数/头中尾原文/末 12 token id |
+| [`repeat_20260918/uocr_audit.py`](repeat_20260918/uocr_audit.py) | 审计脚本(远端 venv python CPU 运行) |
+| [`repeat_20260918/case_forensics.md`](repeat_20260918/case_forensics.md) / JSON | 复读 case 首偏离取证(§7) |

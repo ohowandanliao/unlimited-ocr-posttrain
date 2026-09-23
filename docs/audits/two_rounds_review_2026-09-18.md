@@ -2,7 +2,7 @@
 
 > 性质:独立取证复核——不复述文档结论,全部数字从原始产物重算;全程只读,未重跑任何评测/GPU 任务。
 > 对象:第一轮 `pmc-fullce-16k`(Overall 0.7092)与第二轮 `pmc-readoc-spage-16k`(0.6709)的结论文档链。
-> 复算脚本:`evaluation/review_20260918/verify{1-4}.py`(本地留档=服务器 `posttrain docs/review_20260918/`)。
+> 复算脚本：[`two_rounds_20260918/`](two_rounds_20260918/) 下的 `verify1.py` 至 `verify4.py`。
 > 术语约定:原文档所称"四板斧"在本文写作**四条检测规则**(行重复率≥0.3 / 输出长度≥2×GT / 塌缩≤1/3 / zlib 压缩比<0.15);"退化文档"按具体失效模式称为**复读/过生成/塌缩**文档。
 
 ---
@@ -196,7 +196,7 @@ mix 的 TEDS 0.3908 对"不输出表格"偏乐观,真实表格损伤被低估(�
 
 ## 6. 复核方法
 
-四个脚本(本地 `evaluation/review_20260918/`,同件曾于 jovyan /tmp 运行):`verify1.py`(官方复现/反事实/检测规则/计数/曲线/title87/页数拆分)、`verify2.py`(GT 规模/union 对比/长尾/**循环取证**/数据统计/spage 抽查)、`verify3.py`(计分表池/重归一/ATX 中位/GT 侧重复率/title 分解/32k 检查)、`verify4.py`(spage 对齐/TEDS 总量分解/关键篇 overall)。
+四个脚本位于 [`two_rounds_20260918/`](two_rounds_20260918/)（同件曾于 jovyan `/tmp` 运行）：`verify1.py`(官方复现/反事实/检测规则/计数/曲线/title87/页数拆分)、`verify2.py`(GT 规模/union 对比/长尾/**循环取证**/数据统计/spage 抽查)、`verify3.py`(计分表池/重归一/ATX 中位/GT 侧重复率/title 分解/32k 检查)、`verify4.py`(spage 对齐/TEDS 总量分解/关键篇 overall)。
 
 复核过程中的四个口径澄清(避免后人重蹈):
 

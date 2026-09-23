@@ -1,77 +1,63 @@
-# 文档索引与当前事实源
+# 文档索引
 
-更新时间：2026-09-04（Asia/Shanghai，开源整理）
+更新时间：2026-09-23（Asia/Shanghai）
 
-当前状态：**129-PDF 统一协议评测闭环完成。6 套已完整评测方案全部相对主 Base 回退
-（-1.70 ~ -43.48 pp），9 套方案 Train Fit 均为 `partial_learning`，不进入部署。**
-case 级归因已完成：带壳模型的回退由推理时标题段触发输出协议翻转造成，先验训练与
-先验质量均无责，详见
-[`analysis_all_regress_attribution_2026-09-02.md`](analysis_all_regress_attribution_2026-09-02.md)。
-当前交接总览见 [`HANDOFF_2026-09-01.md`](HANDOFF_2026-09-01.md)。
-2026-09-02 至 09-04 已完成文档与脚本清理：过时预研、旧协议材料、未执行的 recipe 阶梯
-工具、smoke 测试产物与无法复现的旧快照文档已删除；PMC 审计与历史训练归档保留在本目录，
-正式协议默认值、公开路径变量和现行测试已对齐。
+本目录只保留四类材料：操作指南、实验报告、审计证据和历史归档。当前决策以
+[`reports/analysis_experiments_20260922.md`](reports/analysis_experiments_20260922.md)
+为准；其他文档用于复现数字、解释口径或追溯历史，不再各自承担“当前状态”入口。
 
-## Base 评测口径
+## 当前结论
 
-正式主基线是未训练 Base 使用 `<image>Multi page parsing.` 的结果，当前主基线为
-OmniDocBench Total `53.3645`、AI Builder Overall `0.8271`。训练模型按照训练契约使用
-`<image>Multi page merge.`；不能为了"统一 prompt"而让未训练 Base 使用 merge。
+- 六路线统一汇总中，`cont1623` 的修正 Overall 为 `0.7205`，高于 `pmc16k` 的
+  `0.7092`，但仍低于未训练 Base 的 `0.7554`。
+- `mix1623` 的主要新增损伤集中在多页表格：TEDS `0.3908`，多页 `<table>` 发射数
+  `53`；同为 1623 步的 PMC 续训路线分别为 `0.5089` 和 `147`。
+- 现有证据支持“混合配方整体是主要嫌疑”，但不能把责任单独归给 READoc 或单页数据。
+- 下一步是从同一 Base、相同步数和调度启动 PMC / PMC+READoc / PMC+spage / 完整混合
+  四臂消融，并把表格覆盖、结构缺失和复读纳入验收。
 
-夏桢历史评测中的 Base 也是未训练 Base，但使用了 `Multi page merge.`，并且评测入口、单页
-图像处理和 `ngram_window` 也不同，因此得到 OmniDocBench `51.7663`、AI Builder Overall
-`0.7442`。这不是 Base 权重或 Overall 算法不同造成的结果：两种 Overall 都是
-`(Text accuracy + Table accuracy + Reading-order accuracy + Title accuracy) / 4`。
+以上数字来自已保存评测产物。9 月 22 日综合分析没有重新访问服务器权重、训练数据或原始
+评测目录，证据边界见当前决策文档。
 
-后续周报、方案登记和正式泛化结论统一以 `parsing` Base 为主；夏桢的 `merge` Base 只作为
-历史评测 diff 参考，不能作为训练方案的正式相对 Base。具体入口和参数差异见
-[`inference_service_2026-08-24.md`](inference_service_2026-08-24.md)。
+## 阅读顺序
 
-## 路径变量
+| 优先级 | 文档 | 用途 |
+|---|---|---|
+| 1 | [`reports/analysis_experiments_20260922.md`](reports/analysis_experiments_20260922.md) | 当前结论、证据强弱和下一轮实验设计 |
+| 2 | [`reports/experiments_dump_20260922.md`](reports/experiments_dump_20260922.md) | 六路线总表、逐篇结果和三组新增实验的完整数据 |
+| 3 | [`guides/EVAL_GUIDE_2026-09-20.md`](guides/EVAL_GUIDE_2026-09-20.md) | 129-PDF 评测流程、口径和历史坑位 |
+| 4 | [`reports/posttrain_weekly_report_2026-09-20.md`](reports/posttrain_weekly_report_2026-09-20.md) | 前两轮 Full-CE 训练的阶段总结 |
 
-公开记录用变量代替原机器路径：`$UOCR_ROOT` 是仓库外运行根目录，`$MODEL_PATH` 是 Base 模型，
-`$EVAL_PDF_ROOT` / `$EVAL_GT_ROOT` / `$OMNIDOCBENCH_ROOT` 是评测输入与工具，
-`$MINERU_OUTPUT_ROOT` 是标题先验来源。`$WXZ_ROOT`、`$WXZ_READOC_ROOT`、`$WXZ_OUTPUT_ROOT`、
-`$PMC_SOURCE_ROOT`、`$PMC_TITLE_CANDIDATES_ROOT`、`$LEGACY_MIX_ROOT` 和
-`$LEGACY_READOC_SHORT_JSONL` 仅表示历史外部资产位置，不由 `hyx_env.sh` 自动设置。
+## 目录说明
 
-## 当前文档
+### `guides/`：现行操作文档
 
-| 文档 | 用途 |
-|---|---|
-| [`HANDOFF_2026-09-01.md`](HANDOFF_2026-09-01.md) | 当前状态、已清理内容、与后续任务的交接总览 |
-| [`posttrain_weekly_report_2026-08-30.md`](posttrain_weekly_report_2026-08-30.md) | 9 套已训练方案的周报总览：数据、训练参数、checkpoint、Benchmark/Base 对比、Train Fit 和下一步计划 |
-| [`analysis_all_regress_attribution_2026-09-02.md`](analysis_all_regress_attribution_2026-09-02.md) | 全量回退归因汇总：统一协议结果 + case 级证据 + 两轴定责（壳/loss） |
-| [`evaluation_prompt_matrix_2026-09-01.md`](evaluation_prompt_matrix_2026-09-01.md) | 评测 prompt 唯一标准：训练契约、标准矩阵、manifest 规则与各轮审计 |
-| [`evaluation_readoc_view_16k_2026-08-27.md`](evaluation_readoc_view_16k_2026-08-27.md) | 2026-08-27 READoc view 16K 全量评测、AI Builder 细分、title 分、base 差分与复读统计 |
-| [`evaluation_readoc_heading_prior_2026-09-01.md`](evaluation_readoc_heading_prior_2026-09-01.md) | 本轮两套 Title Prior 模型的正式评测记录（§8）与 case 级归因原文（§9） |
-| [`train_fit_heading_prior_2026-09-01.md`](train_fit_heading_prior_2026-09-01.md) | 2026-09-01 两套 Title Prior 模型的 Train Fit / overfit 验收 |
-| [`runs_registry_2026-08-27.md`](runs_registry_2026-08-27.md) | 训练方案、LoRA checkpoint、评测数据/结果和运行目录的对应关系 |
-| [`training_scheme_registry_2026-08-29.md`](training_scheme_registry_2026-08-29.md) | 全部已训练方案的统一登记，以及每个方案的 Benchmark / Train Fit 双验收状态 |
-| [`posttrain_completion_sop_2026-08-28.md`](posttrain_completion_sop_2026-08-28.md) | 每次训练完成后的固定 benchmark 对比、train 数据 overfit 抽测和结论判定规则 |
-| [`inference_service_2026-08-24.md`](inference_service_2026-08-24.md) | 推理入口、多 adapter 部署、prompt 矩阵、Base 主口径与夏桢历史评测 diff |
-| [`../ms_swift_title_mask/scripts/README.md`](../ms_swift_title_mask/scripts/README.md) | 当前脚本、历史数据 builder 与旧评测工具分类 |
+- [`EVAL_GUIDE_2026-09-20.md`](guides/EVAL_GUIDE_2026-09-20.md)：从 checkpoint 到修正 Overall 的完整评测手册。
+- [`posttrain_completion_sop_2026-08-28.md`](guides/posttrain_completion_sop_2026-08-28.md)：Benchmark 与 Train Fit 验收流程。
 
-## 数据实现与审计文档
+### `reports/`：实验结果与综合分析
 
-以下文件用于解释构造代码与数据质量事实，不单独决定训练准入：
+- [`analysis_experiments_20260922.md`](reports/analysis_experiments_20260922.md)：当前决策摘要。
+- [`experiments_dump_20260922.md`](reports/experiments_dump_20260922.md)：最新完整数字和逐篇明细。
+- [`posttrain_weekly_report_2026-09-20.md`](reports/posttrain_weekly_report_2026-09-20.md)：PMC 与混合路线阶段报告。
+- [`evaluation_readoc_view_16k_2026-08-27.md`](reports/evaluation_readoc_view_16k_2026-08-27.md)：READoc 基线评测记录。
 
-- [`pmc_title_silver_pipeline_2026-08-23.md`](pmc_title_silver_pipeline_2026-08-23.md)：PMC 标题规则和正文 quarantine 事实（PMC 线暂停，方案保留）。
-- [`pmc_data_quality_audit_casebook_2026-08-26.md`](pmc_data_quality_audit_casebook_2026-08-26.md) + [`.xlsx`](pmc_data_quality_audit_casebook_2026-08-26.xlsx)：9 个 PMC 原始数据质量典型 case 与对账表。
-- [`wxz_readoc_title_mask_training_2026-08-29.md`](wxz_readoc_title_mask_training_2026-08-29.md)：夏桢两次 READoc Title-mask 训练、原始数据校验值、权重位置与旧 badcase 评测归档；仅作历史记录，评测数字已按统一协议重测取代。
-- [`../ms_swift_title_mask/data_assets/STATUS_ZH.md`](../ms_swift_title_mask/data_assets/STATUS_ZH.md)：旧 ZIP payload 说明；Git clone 不包含 payload。
-- 训练数据校验记录：`$UOCR_ROOT/data/recipes/*.recipe_audit.json`（5 份，对应已训练方案）。
+### `audits/`：独立复核与数据证据
 
-## 已清理内容
+- [`two_rounds_review_2026-09-18.md`](audits/two_rounds_review_2026-09-18.md)：两轮实验复核与评分口径修正；复算脚本在 [`two_rounds_20260918/`](audits/two_rounds_20260918/README.md)。
+- [`repeat_audit_2026-09-18.md`](audits/repeat_audit_2026-09-18.md)：复读、训练数据和 R-SWA 机制审计；产物在 [`repeat_20260918/`](audits/repeat_20260918/README.md)。
+- [`pmc_fullce_attribution_2026-09-17.md`](audits/pmc_fullce_attribution_2026-09-17.md)：首轮 PMC 的逐篇掉分归因。
+- [`pmc_data_quality_audit_casebook_2026-08-26.md`](audits/pmc_data_quality_audit_casebook_2026-08-26.md)：PMC 原始数据典型案例及配套表格。
 
-2026-09-02/03 清理中删除：`docs/archive/legacy/`（11 个 2026-07-14 ~ 08-27 预研/设计文档，
-git 历史有底）、旧协议失败 case 分析（`evaluation_failure_cases_2026-08-25/`）、旧"下一轮
-方案"（`training_optimization_2026-08-26.md`）、论文检索笔记（`research_ocr_posttraining_2026-08-26.md`）、
-重复副本（`inference_service_2026-08-24.multi.md`）与脚本 `.orig` 备份。删除清单详见
-HANDOFF 的"已清理"章节。
+### `archive/`：已被新结论取代的历史材料
 
-## 不进入 Git 的内容
+- [`HANDOFF_2026-09-01.md`](archive/HANDOFF_2026-09-01.md)：Title Prior 阶段交接记录。
+- [`wxz_readoc_title_mask_training_2026-08-29.md`](archive/wxz_readoc_title_mask_training_2026-08-29.md)：早期 READoc Title-mask 训练归档。
 
-PDF、页图、训练 JSONL、模型、adapter 和日志仍放在仓库外。仓库只保存构造/审计脚本、数量与 SHA
-契约、聚合报告及少量明确标注的结构化失败输出。新工具默认拒绝把输出写进源数据目录，并且不会解压
-READoc PDF 到工程中。
+归档文件保留当时语境，其中的“下一步”和已删除文档名不再代表当前仓库状态。
+
+## 代码入口与仓库边界
+
+训练、数据构建和评测脚本见
+[`../ms_swift_title_mask/scripts/README.md`](../ms_swift_title_mask/scripts/README.md)。仓库不保存
+PDF、页图、训练 JSONL、模型、adapter、评测输出或日志；这些产物必须位于外部运行目录。

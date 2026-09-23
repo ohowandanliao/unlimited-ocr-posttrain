@@ -16,11 +16,13 @@ def _row(
     *,
     content_status=None,
     title_status="SILVER_ACCEPTED",
+    sample_form="full_document",
+    prompt="<image>Multi page merge.",
 ):
     meta = {
         "source": source,
         "doc_id": doc_id,
-        "sample_form": "full_document",
+        "sample_form": sample_form,
         "split": "train",
         "title_review_status": title_status,
     }
@@ -29,7 +31,7 @@ def _row(
     return {
         "id": row_id,
         "messages": [
-            {"role": "user", "content": "<image>Multi page merge."},
+            {"role": "user", "content": prompt},
             {"role": "assistant", "content": target},
         ],
         "images": ["/tmp/page.png"],
@@ -113,6 +115,103 @@ class ValidateTrainingRecipeTest(unittest.TestCase):
             max_pmc_char_share=0.12,
         )
         validate_recipe(report, args)
+
+    def test_pmc_fullce_accepts_unique_full_documents(self):
+        rows = [
+            _row("p1", "PMC-v2.2.1", "p1", "# P1\n"),
+            _row("p2", "PMC-v2.2.1", "p2", "# P2\n"),
+        ]
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "train.jsonl"
+            path.write_text(
+                "".join(json.dumps(row) + "\n" for row in rows),
+                encoding="utf-8",
+            )
+            report = audit([path], check_images=False, full_row_validation=False)
+        args = types.SimpleNamespace(
+            recipe="pmc_fullce",
+            min_cjk_char_share=0.15,
+            max_pmc_char_share=0.12,
+        )
+        validate_recipe(report, args)
+
+    def test_pmc_fullce_rejects_single_page_rows(self):
+        rows = [
+            _row(
+                "p1",
+                "PMC-v2.2.1",
+                "p1",
+                "# P1\n",
+                sample_form="single_page",
+                prompt="<image>document parsing.",
+            )
+        ]
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "train.jsonl"
+            path.write_text(json.dumps(rows[0]) + "\n", encoding="utf-8")
+            report = audit([path], check_images=False, full_row_validation=False)
+        args = types.SimpleNamespace(
+            recipe="pmc_fullce",
+            min_cjk_char_share=0.15,
+            max_pmc_char_share=0.12,
+        )
+        with self.assertRaisesRegex(TitleMaskError, "full_document"):
+            validate_recipe(report, args)
+
+    def test_pmc_readoc_mix_accepts_expected_sources_and_forms(self):
+        rows = [
+            _row("p1", "PMC-v2.2.1", "p1", "# P1\n"),
+            _row(
+                "p2",
+                "PMC-v2.2.1",
+                "p2",
+                "# P2\n",
+                sample_form="single_page",
+                prompt="<image>document parsing.",
+            ),
+            _row("r1", "READoc-arxiv", "r1", "# R1\n"),
+        ]
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "train.jsonl"
+            path.write_text(
+                "".join(json.dumps(row) + "\n" for row in rows),
+                encoding="utf-8",
+            )
+            report = audit([path], check_images=False, full_row_validation=False)
+        args = types.SimpleNamespace(
+            recipe="pmc_readoc_mix",
+            min_cjk_char_share=0.15,
+            max_pmc_char_share=0.12,
+        )
+        validate_recipe(report, args)
+
+    def test_pmc_readoc_mix_rejects_repeated_pmc_document(self):
+        rows = [
+            _row("p1", "PMC-v2.2.1", "p1", "# P1\n"),
+            _row(
+                "p1-page",
+                "PMC-v2.2.1",
+                "p1",
+                "# P1 page\n",
+                sample_form="single_page",
+                prompt="<image>document parsing.",
+            ),
+            _row("r1", "READoc-arxiv", "r1", "# R1\n"),
+        ]
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "train.jsonl"
+            path.write_text(
+                "".join(json.dumps(row) + "\n" for row in rows),
+                encoding="utf-8",
+            )
+            report = audit([path], check_images=False, full_row_validation=False)
+        args = types.SimpleNamespace(
+            recipe="pmc_readoc_mix",
+            min_cjk_char_share=0.15,
+            max_pmc_char_share=0.12,
+        )
+        with self.assertRaisesRegex(TitleMaskError, "repeats a PMC document"):
+            validate_recipe(report, args)
 
 
 if __name__ == "__main__":

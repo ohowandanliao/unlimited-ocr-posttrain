@@ -41,8 +41,8 @@ $UOCR_ROOT/evaluation/tooling/omni-eval-venv
 单页图像处理和多页 `ngram_window`，结果为 `51.7663 / 0.7442`。该结果用于解释评测 diff，
 不属于本报告的主基线，也不能替换下面表格中的 `base`。两边 AI Builder Overall 算法相同，
 都是 `(Text accuracy + Table accuracy + Reading-order accuracy + Title accuracy) / 4`。
-完整差异见 `wxz_readoc_title_mask_training_2026-08-29.md` 和
-`inference_service_2026-08-24.md`。
+完整历史差异见
+[`../archive/wxz_readoc_title_mask_training_2026-08-29.md`](../archive/wxz_readoc_title_mask_training_2026-08-29.md)。
 
 第一次直接调用 OmniDocBench 失败，原因是环境中缺少 `mmeval`。随后已在上述环境中成功重新运行三套评分。
 成功重跑的日志文件位于结果目录中，分别为：`omnidocbench_base_gtpdf_remote_rerun.log`、

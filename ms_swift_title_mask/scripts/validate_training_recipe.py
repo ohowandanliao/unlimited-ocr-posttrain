@@ -19,7 +19,14 @@ from ms_swift_title_mask.data_contract import read_jsonl, validate_training_row 
 
 
 RECIPE_CHOICES = (
-    "readoc_r0", "replay_r1", "pmc_s10", "trusted_title", "readoc_view_ablation", "legacy_20260823"
+    "readoc_r0",
+    "replay_r1",
+    "pmc_s10",
+    "pmc_fullce",
+    "pmc_readoc_mix",
+    "trusted_title",
+    "readoc_view_ablation",
+    "legacy_20260823",
 )
 _CJK_RE = re.compile(r"[\u3400-\u9fff]")
 _MISSING_ASSET_RE = re.compile(r"!\[[^\]]*\]\((?!https?://|data:)[^\n)]+\)")
@@ -193,6 +200,36 @@ def validate_recipe(report: dict, args: argparse.Namespace) -> None:
             raise TitleMaskError(f"readoc_r0 must contain only READoc; got {family_share}")
         if sample_forms != {"full_document"}:
             raise TitleMaskError(f"readoc_r0 requires full_document rows; got {sorted(sample_forms)}")
+    elif args.recipe == "pmc_fullce":
+        if set(family_share) != {"pmc"}:
+            raise TitleMaskError(f"pmc_fullce must contain only PMC; got {family_share}")
+        if sample_forms != {"full_document"}:
+            raise TitleMaskError(f"pmc_fullce requires full_document rows; got {sorted(sample_forms)}")
+        if report["repeated_pmc_documents"]:
+            raise TitleMaskError("pmc_fullce repeats a PMC document; choose one form per document")
+        # PMC 表格 HTML 内的 <img>/<graphic>（inline-formula/figurebox 占位，源 GT 打包产物，
+        # 2026-09-17 实测 2706 处全部 in-table、228 篇）按 v2.2.1 现状放行；
+        # 相对图片引用与断 LaTeX 仍为 0 硬门。
+        if artifacts.get("relative_markdown_image") or artifacts.get("known_broken_latex"):
+            raise TitleMaskError(f"pmc_fullce has serialized content artifacts: {artifacts}")
+    elif args.recipe == "pmc_readoc_mix":
+        if family_share.get("readoc", 0.0) <= 0 or pmc_share <= 0:
+            raise TitleMaskError("pmc_readoc_mix requires both READoc and PMC")
+        forms = set(report["sample_forms"])
+        if forms - {"full_document", "single_page"}:
+            raise TitleMaskError(f"pmc_readoc_mix allows full_document/single_page forms; got {sorted(forms)}")
+        prompts = set(report["prompts"])
+        if prompts - {"<image>document parsing.", "<image>Multi page merge."}:
+            raise TitleMaskError(f"pmc_readoc_mix unexpected prompts: {sorted(prompts)}")
+        if report["repeated_pmc_documents"]:
+            raise TitleMaskError("pmc_readoc_mix repeats a PMC document; at most one row per document")
+        if report["pmc_artifacts"].get("relative_markdown_image") or report[
+            "pmc_artifacts"
+        ].get("known_broken_latex"):
+            raise TitleMaskError(
+                "pmc_readoc_mix has PMC serialized content artifacts: "
+                f"{report['pmc_artifacts']}"
+            )
     elif args.recipe == "replay_r1":
         if family_share.get("readoc", 0.0) <= 0 or replay_share <= 0:
             raise TitleMaskError("replay_r1 requires both READoc and replay sources")

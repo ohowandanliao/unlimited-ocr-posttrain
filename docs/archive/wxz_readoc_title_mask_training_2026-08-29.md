@@ -1,9 +1,11 @@
 # 夏桢两次 READoc Title-mask 训练归档
 
+> 历史归档：本文只保留当时的训练事实，不再定义后续方向。当前结论见
+> [`../reports/analysis_experiments_20260922.md`](../reports/analysis_experiments_20260922.md)。
+
 更新时间：2026-09-04（Asia/Shanghai，历史结果状态与开源路径整理）
 
 本文记录 `$WXZ_ROOT/unlimited-ocr-finetune` 中两次 2026-08-24 完成的 READoc LoRA 训练。
-后续方向以 `posttrain_weekly_report_2026-08-30.md` §5 为准。
 
 ## 1. 结论摘要
 
